@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
  
 
 public class Doctor {
-	
+	private static final long serialVersionUID = -115684524257282729L;
 	//Atributes
 	private Integer id;
 	private String name;

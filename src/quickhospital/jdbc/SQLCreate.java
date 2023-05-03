@@ -10,7 +10,7 @@ public class SQLCreate {
 		try {
 			// Open database connection
 			Class.forName("org.sqlite.JDBC");
-			Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
+			Connection c = DriverManager.getConnection("jdbc:sqlite:/Users/sofia/Desktop/HospitalPrueba.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened.");
 			
@@ -21,7 +21,8 @@ public class SQLCreate {
 					   + " name     TEXT     NOT NULL, "
 					   + " arrivalTime  DATETIME	 NOT NULL,"
 			   		   + " departureTime  DATETIME	 NOT NULL,"
-			   		   + "speciality_id INTEGER REFERENCES speciality(id) ON UPDATE CASCADE ON DELETE SET NULL )";
+			   		   + "speciality_id INTEGER REFERENCES speciality(id) ON UPDATE CASCADE ON DELETE SET NULL"
+			   		   + "hospital_id   INTEGER REFERENCES hospital(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
 			Statement stmt2 = c.createStatement();
@@ -56,10 +57,10 @@ public class SQLCreate {
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			Statement stmt6 = c.createStatement();
-			String sql6 = "CREATE TABLE speciality "
+			String sql6 = "CREATE TABLE waitingList "
 					   + "(id       INTEGER  PRIMARY KEY AUTOINCREMENT,"
-					   + " date     DATETIME     NOT NULL, "
-					   + " status   BOOLEAN    NOT NULL, "
+					   + " date     DATETIME     NOT NULL DEFAULT CURRENT DATETIME, "
+					   + " status   BOOLEAN  , "
 					   + " speciality_id INTEGER REFERENCES speciality(id) ON UPDATE CASCADE ON DELETE SET NULL, "
 					   + " patient_id INTEGER REFERENCES patient(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 			stmt6.executeUpdate(sql6);

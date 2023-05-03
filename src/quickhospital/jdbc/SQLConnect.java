@@ -7,7 +7,7 @@ public class SQLConnect {
 		try {
 			// Open database connection
 			Class.forName("org.sqlite.JDBC");
-			Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
+			Connection c = DriverManager.getConnection("jdbc:sqlite:/Users/sofia/Desktop/HospitalPrueba.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened.");
 			

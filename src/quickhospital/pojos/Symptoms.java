@@ -1,7 +1,7 @@
 package quickhospital.pojos;
 
 public class Symptoms {
-	
+	private static final long serialVersionUID = -76493724257282729L;
 	//Atributes
 	private Integer id;
 	private String name;

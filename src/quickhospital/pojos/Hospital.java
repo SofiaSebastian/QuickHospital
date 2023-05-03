@@ -3,12 +3,14 @@ package quickhospital.pojos;
 import java.util.ArrayList;
 
 public class Hospital {
+	private static final long serialVersionUID = -1156840724257282729L;
 	
 	//Atributes
 	private Integer id;
 	private String name;
 	private Integer capacity;
 	private String location;
+	private Integer administrator;
 	private ArrayList<Speciality> specialities;
 	
 	
@@ -21,12 +23,13 @@ public class Hospital {
 
 	//Constructors using Fields
 	
-	public Hospital(Integer id, String name, Integer capacity, String location) {
+	public Hospital(Integer id, String name, Integer capacity, String location, Integer administrator) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.capacity = capacity;
 		this.location = location;
+		this.administrator=administrator;
 		this.specialities = new ArrayList<>();
 	}
 

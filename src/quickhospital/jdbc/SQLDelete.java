@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import quickhospital.pojos.Hospital;
 import sample.db.pojos.Department;
 import sample.db.pojos.Employee;
 
@@ -48,6 +49,41 @@ public class SQLDelete {
 		rs.close();
 		stmt.close();
 		return department;
+	}
+	
+	private static Hospital getHospital(int hospId) throws SQLException {
+		Statement stmt = c.createStatement();
+		String sql = "SELECT * FROM hospital WHERE id = "+ hospId;
+		ResultSet rs = stmt.executeQuery(sql);
+		rs.next();
+		int id = rs.getInt("id");
+		String name = rs.getString("name");
+		String location = rs.getString("location");
+		int capacity=rs.getInt("capacity");
+		int administrator=rs.getInt("administrator");
+		Hospital hospital = new Hospital(id, name, capacity,location, administrator );
+		rs.close();
+		stmt.close();
+		return hospital;
+	}
+	
+	private static void printSpecialities() throws SQLException {
+		Statement stmt = c.createStatement();
+		String sql = "SELECT * FROM specialities";
+		ResultSet rs = stmt.executeQuery(sql);
+		while (rs.next()) {
+			int id = rs.getInt("id");
+			String name = rs.getString("name");
+			Date dob = rs.getDate("dob");
+			String address = rs.getString("address");
+			Double salary = rs.getDouble("salary");
+			byte[] photo = rs.getBytes("photo");
+			Department dep = getDepartments(rs.getInt("dep_id"));
+			Employee employee = new Employee(id, name, dob, address, salary, photo, dep);
+			System.out.println(employee);
+		}
+		rs.close();
+		stmt.close();
 	}
 
 	public static void main(String args[]) {

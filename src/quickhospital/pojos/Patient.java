@@ -3,6 +3,7 @@ package quickhospital.pojos;
 import java.util.ArrayList;
 
 public class Patient {
+	private static final long serialVersionUID = -434234724257282729L;
 	//Atributes
 	private Integer id;
 	private String name;

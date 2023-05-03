@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class WaitingList {
+	private static final long serialVersionUID = -980840724257282729L;
 	//Atributes
 	private Integer id;
 	private ArrayList<LocalDateTime>  appointment;
