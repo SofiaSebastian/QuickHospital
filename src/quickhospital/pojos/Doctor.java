@@ -13,7 +13,7 @@ public class Doctor {
 	private LocalDateTime departureTime;
 	
 	
-	//
+	//Constructors
 	public Doctor() {
 		super();
 	}
@@ -23,6 +23,36 @@ public class Doctor {
 		this.name = name;
 		this.arrivalTime = arrivalTime;
 		this.departureTime = departureTime;
+	}
+	
+	//Getters and Setters
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public LocalDateTime getArrivalTime() {
+		return arrivalTime;
+	}
+	public void setArrivalTime(LocalDateTime arrivalTime) {
+		this.arrivalTime = arrivalTime;
+	}
+	public LocalDateTime getDepartureTime() {
+		return departureTime;
+	}
+	public void setDepartureTime(LocalDateTime departureTime) {
+		this.departureTime = departureTime;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 	

@@ -1,6 +1,6 @@
 package quickhospital.pojos;
 
-public class Symptoms {
+public class Symptom {
 	private static final long serialVersionUID = -76493724257282729L;
 	//Atributes
 	private Integer id;
@@ -8,12 +8,12 @@ public class Symptoms {
 	
 	//Empty constructor
 	
-	public Symptoms() {
+	public Symptom() {
 		super();
 	}
 	
 	//Constructor using Fields
-	public Symptoms(Integer id, String name) {
+	public Symptom(Integer id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
