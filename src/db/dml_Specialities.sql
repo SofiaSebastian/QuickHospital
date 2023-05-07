@@ -1,9 +1,9 @@
-INSERT INTO Specialities (name) VALUES 
+INSERT INTO Specialities (Name) VALUES 
 ("Cardiology"),
 ("Dermatology"),
-("Family Medicine"),
+("Neurology"),
 ("Ginecology"),
 ("Traumatology"),
 ("Gastroenterology"),
-("Pediatrics"),
+("Ophtalmology"),
 ("Otorhinolaryngologist");

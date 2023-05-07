@@ -5,6 +5,3 @@ INSERT INTO Hospitals (Name,Capacity,Location) VALUES
 ("Hospital de Guadarrama", 750, "Avda Molino del Rey, 2"),
 ("Hospital Universitario Ramon y Cajal", 900, "Ctra. Colmenar Viejo Km 9100"),
 ("Hospital Universitario Infanta Sofia", 1100, "Paseo de Europa, 34");
-
-
- 
