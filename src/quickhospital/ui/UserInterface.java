@@ -36,6 +36,7 @@ public class UserInterface {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int option = 7;
 		String read;
+		//Leer create tables y insert************
 		do {
 			firstMenu();
 			option = Exceptions.leerEntero("TYPE AN OPTION:");
@@ -83,8 +84,6 @@ public class UserInterface {
 				e.printStackTrace();
 			}
 
-			
-			// Mostrar listado de hospitales con la especialidad
 
 		case 2:
 

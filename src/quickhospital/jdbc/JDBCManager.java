@@ -216,7 +216,7 @@ public class JDBCManager implements DBManager{
 			while(rs.next()) {	
 				id=rs.getInt("Name");
 			}
-			sql= "SELECT Hospital_id FROM Hostitals_Specialities WHERE Speciality-id=?";
+			sql= "SELECT Hospital_id FROM Hospitals_Specialities WHERE Speciality-id=?";
 			s=c.prepareStatement(sql);
 			s.setInt(1, id);
 			rs=stmt.executeQuery(sql);
@@ -245,5 +245,14 @@ public class JDBCManager implements DBManager{
 		};
 	}
 	
+	public void addToWaitingList(Integer hospId, Integer spId, Integer patId ) {
+		String sql= "INSERT INTO WaitingList (Patient_Id, Hospital_Id, Speciality_Id) VALUES ('" + patId + "', '"+ hospId	+ "', '" + spId	+ "'); ";
+		try {
+			ResultSet rs = stmt.executeQuery(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+	}
 }
 	
