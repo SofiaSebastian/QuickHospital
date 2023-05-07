@@ -8,7 +8,7 @@ public class Patient {
 	private Integer id;
 	private String name;
 	private Integer speciality_id;
-	private ArrayList<Symptoms> symptoms;
+	private ArrayList<Symptom> symptoms;
 	
 	//Empty constructor
 	public Patient() {
@@ -17,7 +17,7 @@ public class Patient {
 	}
 
 	//Constructors using Fields
-	public Patient(Integer id, String name, Integer speciality_id, ArrayList<Symptoms> symptoms) {
+	public Patient(Integer id, String name, Integer speciality_id, ArrayList<Symptom> symptoms) {
 		super();
 		this.id = id;
 		this.name = name;
