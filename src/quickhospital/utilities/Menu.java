@@ -91,11 +91,24 @@ public class Menu {
 	}
 	
 	public static void addSymptoms() {
-		
+		Integer id = Madrid.getHospitals().get(aux-1).getSpecialities().get(0).getSymptoms().size()+1;
+        String name = Utils.leerCadena("Insert symptoms's name: ");
+        Symptom sym = new Symptom(id, name);
+        Madrid.showSpecialityfromHospital(aux);
+        aux2 = Utils.leerEntero("Choose the speciality you want to add the symptom to: ");
+        for(int i = 0; i < Madrid.getHospitals().size(); i++) {
+    		Madrid.getHospitals().get(i).getSpecialities().get(aux2-1).addSymptom(sym);
+        }
 	}
 	
 	public static void deleteSymptoms() {
-		
+		Madrid.showSpecialityfromHospital(aux);
+        aux2 = Utils.leerEntero("Choose the speciality you want to delete the symptom from: ");
+		//Madrid.showSymptoms;
+		aux = Utils.leerEntero("Choose the symptom you want to delete from the speciality: ");
+        for(int i = 0; i < Madrid.getHospitals().size(); i++) {
+    		Madrid.getHospitals().get(i).getSpecialities().get(aux2-1).deleteSymptom(aux);	
+        }
 	}
 	
 	

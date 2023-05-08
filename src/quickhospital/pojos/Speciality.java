@@ -90,9 +90,12 @@ public class Speciality {
 		this.waitingList = waitingList;
 	}
 	
-	public void addSymptom(Integer id, String name) {
-        Symptom sym = new Symptom(id, name);           
+	public void addSymptom(Symptom sym) {         
         symptoms.add(sym);
+    } 
+	
+	public void deleteSymptom(int id) {         
+        symptoms.remove(id-1);
     } 
 
 }
