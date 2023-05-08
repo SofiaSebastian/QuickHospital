@@ -3,7 +3,7 @@ package quickhospital.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import quickhospital.utilities.Exceptions;
+import quickhospital.utilities.Utils;
 import java.util.ArrayList;
 
 import quickhospital.ifaces.DBManager;
@@ -39,7 +39,7 @@ public class UserInterface {
 		//Leer create tables y insert************
 		do {
 			firstMenu();
-			option = Exceptions.leerEntero("TYPE AN OPTION:");
+			option = Utils.leerEntero("TYPE AN OPTION:");
 		} while (option < 1 || option > 2);
 		// HACER LOG IN CON JPA
 
@@ -53,7 +53,7 @@ public class UserInterface {
 		do {
 			
 			patientMenu();
-			option = Exceptions.leerEntero("TYPE AN OPTION:");
+			option = Utils.leerEntero("TYPE AN OPTION:");
 
 		} while (option < 1 || option > 3);
 
@@ -70,8 +70,8 @@ public class UserInterface {
 				do {
 					read = br.readLine();
 					int i;
-					if (Exceptions.esInt(read)) {
-						i = Exceptions.pasarInt(read);
+					if (Utils.esInt(read)) {
+						i = Utils.pasarInt(read);
 						if (i >= 1 && i <= s.size()) {
 							symp_id.add(i);
 						} else {
@@ -82,7 +82,7 @@ public class UserInterface {
 				String sp=db.compareSymptoms(symp_id);
 				System.out.println("The corresponding specialy is "+ sp);
 				db.showHospitals(sp);
-				option = Exceptions.leerEntero("TYPE THE NUMBER CORRESPONDING TO THE HOSPITAL TO BE ADDED TO THE WAITING LIST:");
+				option = Utils.leerEntero("TYPE THE NUMBER CORRESPONDING TO THE HOSPITAL TO BE ADDED TO THE WAITING LIST:");
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

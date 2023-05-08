@@ -3,7 +3,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Exceptions {
+public class Utils {
 	
 	public static boolean esInt(String s) {// para comprobar si lo que nos pasan por teclado es un int
         boolean isInt = false;
@@ -43,6 +43,21 @@ public class Exceptions {
             }
         }
     }
+    
+    public static String leerCadena(String string){
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String stringLeida;
+        System.out.println(string);
+        while (true){
+            try{
+                stringLeida = br.readLine();
+                return stringLeida;
+            }catch (IOException ioe){
+                System.out.println("Error al leer de teclado");
+            }
+        }
+    }
+    
     public static int readSymptoms (String string){
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int intLeido;

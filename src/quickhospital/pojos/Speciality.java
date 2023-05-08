@@ -8,7 +8,7 @@ public class Speciality {
 	// Atributes
 	private Integer id;
 	private String name;
-	private ArrayList<String> symptoms;
+	private ArrayList<Symptom> symptoms;
 	private ArrayList<Doctor> doctors;
 	private WaitingList waitingList;
 
@@ -21,7 +21,7 @@ public class Speciality {
 
 	// Constructor using Fields
 
-	public Speciality(Integer id, String name, ArrayList<String> symptoms, ArrayList<Doctor> doctors,
+	public Speciality(Integer id, String name, ArrayList<Symptom> symptoms, ArrayList<Doctor> doctors,
 			WaitingList waitingList) {
 		super();
 		this.id = id;
@@ -38,6 +38,15 @@ public class Speciality {
 		this.symptoms = new ArrayList<>();
 		this.doctors = new ArrayList<>();
 		this.waitingList = waitingList;
+	}
+	
+	public Speciality(Integer id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.symptoms = new ArrayList<>();
+		this.doctors = new ArrayList<>();
+		this.waitingList = null;
 	}
 
 	// Getters and Setters
@@ -57,11 +66,11 @@ public class Speciality {
 		this.name = name;
 	}
 
-	public ArrayList<String> getSymptoms() {
+	public ArrayList<Symptom> getSymptoms() {
 		return symptoms;
 	}
 
-	public void setSymptoms(ArrayList<String> symptoms) {
+	public void setSymptoms(ArrayList<Symptom> symptoms) {
 		this.symptoms = symptoms;
 	}
 
@@ -80,5 +89,10 @@ public class Speciality {
 	public void setWaitingList(WaitingList waitingList) {
 		this.waitingList = waitingList;
 	}
+	
+	public void addSymptom(Integer id, String name) {
+        Symptom sym = new Symptom(id, name);           
+        symptoms.add(sym);
+    } 
 
 }
