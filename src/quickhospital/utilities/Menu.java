@@ -106,7 +106,7 @@ public class Menu {
 	public static void deleteSymptoms() {
 		try{
 			Madrid.showHospitals();
-	        int aux = Utils.leerEntero("Choose any hospital with the speciality to wich you want to add a symptom: ");
+	        int aux = Utils.leerEntero("Choose the hospital with the speciality to wich you want to add a symptom: ");
 	        Madrid.showSpecialities(aux);
 	        int aux2 = Utils.leerEntero("Choose the speciality you want to delete the symptom from: ");
 			Madrid.showSymptoms(aux, aux2);
