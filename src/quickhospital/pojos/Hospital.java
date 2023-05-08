@@ -29,7 +29,7 @@ public class Hospital {
 		this.name = name;
 		this.capacity = capacity;
 		this.location = location;
-		this.administrator=administrator;
+		this.administrator = administrator;
 		this.specialities = new ArrayList<>();
 	}
 
@@ -40,8 +40,16 @@ public class Hospital {
 		this.name = name;
 		this.capacity = capacity;
 		this.location = location;
-		this.specialities = specialities;
-		
+		this.specialities = specialities;	
+	}
+	
+	public Hospital(Integer id, String name, Integer capacity, String location) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.capacity = capacity;
+		this.location = location;
+		this.specialities = new ArrayList<>();
 	}
 
 	//Getters and Setters
@@ -94,5 +102,13 @@ public class Hospital {
 	public void setSpecialities(ArrayList<Speciality> specialities) {
 		this.specialities = specialities;
 	}
+	
+	public void addSpeciality(Speciality sp) {          
+        specialities.add(sp);
+    } 
+	
+	public void deleteSpeciality(int id){
+        specialities.remove(id-1);
+    }
 	
 }
