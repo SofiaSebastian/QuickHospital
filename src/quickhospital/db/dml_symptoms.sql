@@ -31,4 +31,4 @@ INSERT INTO Symptoms (Name) VALUES
 ("Sprain"),
 ("Swelling"),
 ("Bruise");
- s
+ 
