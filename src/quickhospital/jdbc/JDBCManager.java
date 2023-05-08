@@ -2,6 +2,7 @@ package quickhospital.jdbc;
 import java.lang.System.Logger;
 import java.sql.*;
 import java.util.*;
+import java.io.*;
 
 
 import quickhospital.ifaces.DBManager;
@@ -11,6 +12,15 @@ public class JDBCManager implements DBManager{
 	
 	private static Connection c;
 	private static Statement stmt;
+	
+	private static final String LOCATION = "./db/quickHospital.db";
+	
+	
+	
+    private static final String sqlAddCliente = "INSERT INTO Clientes(Nombre,Apellido,DNI, Email, NumTelefono, Password) VALUES (?,?,?,?,?,?);";
+    private static final String sqlAddEmpleado = "INSERT INTO Empleado(Nombre,Apellido,Puesto,Sueldo,DNI) VALUES (?,?,?,?,?);";
+    private static final String sqlAddAeropuerto = "INSERT INTO Aeropuertos(Nombre,Codigo) VALUES (?,?);";
+    private static final String sqlAddCompañia = "INSERT INTO Compañias(Nombre,PaginaWeb,Pais, NumTelefono, Email) VALUES (?,?,?,?,?);";
 	
 	private PreparedStatement prepAddHospital;
 	private PreparedStatement prepAddSpeciality;
@@ -22,15 +32,117 @@ public class JDBCManager implements DBManager{
 	
 	//final static DefaultValues defaultvalues= new DefaultValues();
 	//final static Logger TERM = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
 	
-	private static final String LOCATION = "./db/QuickHospital.db";
-	private static final String ficheroStart = "./db/ddl.sql";
-	private static final String ficheroStartAeropuerto = "./db/dml_Hospitals.sql";
-	private static final String ficheroStartCompañia = "./db/dml_Specialities.sql";
-
 	
-	//Angel tiene metidos aqui los create table...
+	public void connect() {
+		try {
+			// Open database connection
+			Class.forName("org.sqlite.JDBC");
+			Connection c = DriverManager.getConnection("jdbc:sqlite:./db/quickHospital.db");
+			c.createStatement().execute("PRAGMA foreign_keys=ON");
+			System.out.println("Database connection opened.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void disconnect() {
+		try {
+			c.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void startProgram(){
+		connect();
+		createTables();
+	}
+	
+	
+	
+	public void createTables() {
+		try{
+			Statement stmt1 = c.createStatement();
+			String sql1= "CREATE TABLE IF NOT EXISTS Hospitals"
+				+"(Id   INTEGER  PRIMARY KEY AUTOINCREMENT,"
+				+"Name     TEXT     NOT NULL, "
+				+"Capacity  INTEGER  NOT NULL, "
+				+"Location  TEXT    NOT NULL);)";
+		stmt1.executeUpdate(sql1);
+		stmt1.close();
+
+	Statement stmt2 = c.createStatement();
+	String sql2= "CREATE TABLE IF NOT EXISTS Specialities"
+			+ "(Id   INTEGER  PRIMARY KEY AUTOINCREMENT,"
+			+ "Name     TEXT     NOT NULL);";
+	stmt2.executeUpdate(sql2);
+	stmt2.close();
+	
+	Statement stmt3 = c.createStatement();
+	String sql3="CREATE TABLE IF NOT EXISTS Doctors"
+			+ "(Id   INTEGER  PRIMARY KEY AUTOINCREMENT,"
+			+ "Name     TEXT     NOT NULL,"
+			+ "ArrivalTime  DATETIME  NOT NULL, "
+			+ "DepartureTime  DATETIME    NOT NULL,"
+			+ "Hospital_Id INTEGER REFERENCES Hospitals(Id) ON UPDATE CASCADE ON DELETE SET NULL,"
+			+ "Speciality_Id INTEGER REFERENCES Specialities(Id) ON UPDATE CASCADE ON DELETE SET NULL);";
+	stmt3.executeUpdate(sql3);
+	stmt3.close();
+
+	Statement stmt4 = c.createStatement();
+	String sql4="CREATE TABLE IF NOT EXISTS Patients"
+			+ "(Id   INTEGER  PRIMARY KEY AUTOINCREMENT,"
+			+ "Name     TEXT     NOT NULL,"
+			+ "Speciality_Id INTEGER REFERENCES Specialities(Id) ON UPDATE CASCADE ON DELETE SET NULL);";
+	stmt4.executeUpdate(sql4);
+	stmt4.close();
+
+	Statement stmt5 = c.createStatement();
+	String sql5="CREATE TABLE IF NOT EXISTS Symptoms"
+			+ "(Id   INTEGER  PRIMARY KEY AUTOINCREMENT,"
+			+ "Name     TEXT     NOT NULL);";
+	stmt5.executeUpdate(sql5);
+	stmt5.close();
+
+	Statement stmt6 = c.createStatement();
+	String sql6="CREATE TABLE IF NOT EXISTS WaitingLists"
+			+ "(Id   INTEGER  PRIMARY KEY AUTOINCREMENT,"
+			+ "Date  DATETIME  NOT NULL, "
+			+ "Status  BOOLEAN  NOT NULL,"
+			+ "Patient_Id INTEGER REFERENCES Patients(Id) ON UPDATE CASCADE ON DELETE SET NULL,"
+			+ "Speciality_Id INTEGER REFERENCES Specialities(Id) ON UPDATE CASCADE ON DELETE SET NULL,"
+			+ "Hospital_Id INTEGER REFERENCES Hospitals(Id) ON UPDATE CASCADE ON DELETE SET NULL);";
+	stmt6.executeUpdate(sql6);
+	stmt6.close();
+
+	Statement stmt7 = c.createStatement();
+	String sql7="CREATE TABLE IF NOT EXISTS Hospitals_Specialities"
+			+ "(Hospital_Id INTEGER REFERENCES Hospitals(Id) ON UPDATE CASCADE ON DELETE SET NULL,"
+			+ "Speciality_Id INTEGER REFERENCES Specialities(Id) ON UPDATE CASCADE ON DELETE SET NULL,"
+			+ "PRIMARY KEY (Hospital_Id,Speciality_Id));";
+	stmt7.executeUpdate(sql7);
+	stmt7.close();
+									
+	Statement stmt8 = c.createStatement();
+	String sql8="CREATE TABLE IF NOT EXISTS Specialities_Symptoms"
+			+ "(Symptoms_Id INTEGER REFERENCES Symptoms(Id) ON UPDATE CASCADE ON DELETE SET NULL,"
+			+ "Speciality_Id INTEGER REFERENCES Specialities(Id) ON UPDATE CASCADE ON DELETE SET NULL,"
+			+ "PRIMARY KEY (Speciality_Id,Symptoms_Id));";
+	stmt8.executeUpdate(sql8);
+	stmt8.close();
+
+	Statement stmt9 = c.createStatement();
+	String sql9="CREATE TABLE IF NOT EXISTS Patients_Symptoms"
+			+ "(Symptoms_Id INTEGER REFERENCES Symptoms(Id) ON UPDATE CASCADE ON DELETE SET NULL,"
+			+ "Patient_Id INTEGER REFERENCES Patients(Id) ON UPDATE CASCADE ON DELETE SET NULL,"
+			+ "PRIMARY KEY (Patient_Id,Symptoms_Id));";
+	stmt9.executeUpdate(sql9);
+	stmt9.close();
+	}
+	
+	
+	
 	
 	public ArrayList<Symptom> getSymptoms(){ //get the symptoms from the db 
 		String sql = "SELECT * FROM Symptoms;";
