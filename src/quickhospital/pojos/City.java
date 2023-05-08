@@ -41,4 +41,12 @@ public class City {
 	public void addSpecialitytoHospital(Speciality sp, int id){          
         hospitals.get(id-1).addSpeciality(sp);
 	}
+	
+	public void showSpecialityfromHospital(int id) {
+		hospitals.get(id-1).showSpeciality();
+	}
+	
+	public void deleteSpecialityfromHospital(int id, int id2){
+		hospitals.get(id-1).deleteSpeciality(id2-1);
+    }
 }

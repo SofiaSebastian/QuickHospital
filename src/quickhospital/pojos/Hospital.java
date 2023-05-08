@@ -111,4 +111,10 @@ public class Hospital {
         specialities.remove(id-1);
     }
 	
+	public void showSpeciality() {
+		for(int i = 0; i < specialities.size(); i++){
+            System.out.println((i + 1) + " " +specialities.get(i));
+        }
+	}
+	
 }

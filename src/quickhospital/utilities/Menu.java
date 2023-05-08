@@ -5,6 +5,7 @@ import quickhospital.pojos.*;
 public class Menu {
 	private static final City Madrid = new City();
     private static int aux;
+    private static int aux2;
 	
 	public static void main(String[] args) {
         int opcion;
@@ -57,13 +58,13 @@ public class Menu {
 	
 	public static void addSpeciality() {
 		try{
+			Madrid.showHospitals();
             aux = Utils.leerEntero("Choose the hospital you want to add the speciality: "); 
             if(Madrid.getHospitals().get(aux-1) != null){
                 Integer id = Madrid.getHospitals().get(aux-1).getSpecialities().size()+1;
                 String name = Utils.leerCadena("Insert speciality's name: ");
                 Speciality sp = new Speciality();
-                experimento.añadirRatonAPoblacion(r, aux); 
-                existeRaton = true;
+                Madrid.addSpecialitytoHospital(sp, aux);
             }else{
                 System.out.println("This hospital doesn't exist!");
             }
@@ -74,7 +75,19 @@ public class Menu {
 	
 	
 	public static void deleteSpeciality() {
-		
+		try{
+			Madrid.showHospitals();
+            aux = Utils.leerEntero("Choose the hospital you want to delete the speciality: "); 
+            if(Madrid.getHospitals().get(aux-1) != null){
+                Madrid.showSpecialityfromHospital(aux);
+                aux2 = Utils.leerEntero("Choose the speciality you want to delete: "); 
+                Madrid.deleteSpecialityfromHospital(aux, aux2);
+            }else{
+                System.out.println("This hospital doesn't exist!");
+            }
+        }catch(IndexOutOfBoundsException ex){
+            System.out.println(ex);
+        }
 	}
 	
 	public static void addSymptoms() {
