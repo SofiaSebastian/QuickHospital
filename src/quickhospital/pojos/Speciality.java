@@ -88,14 +88,6 @@ public class Speciality {
 
 	public void setWaitingList(WaitingList waitingList) {
 		this.waitingList = waitingList;
-	}
-	
-	public void addSymptom(Symptom sym) {         
-        symptoms.add(sym);
-    } 
-	
-	public void deleteSymptom(int id) {         
-        symptoms.remove(id-1);
-    } 
+	} 
 
 }

@@ -38,15 +38,31 @@ public class City {
         }
 	}
 	
-	public void addSpecialitytoHospital(Speciality sp, int id){          
-        hospitals.get(id-1).addSpeciality(sp);
+	public void addSpeciality(Speciality sp, int id){          
+        hospitals.get(id-1).getSpecialities().add(sp);
 	}
 	
-	public void showSpecialityfromHospital(int id) {
-		hospitals.get(id-1).showSpeciality();
+	public void showSpecialities(int id) {
+		for(int i = 0; i < hospitals.get(id-1).getSpecialities().size(); i++){
+			System.out.println((i + 1) + " " + hospitals.get(id-1).getSpecialities().get(i));
+		}
 	}
 	
-	public void deleteSpecialityfromHospital(int id, int id2){
-		hospitals.get(id-1).deleteSpeciality(id2-1);
+	public void deleteSpeciality(int id, int id2){
+		hospitals.get(id-1).getSpecialities().remove(id2-2);
     }
+	
+	public void addSymptom(int id, int id2, Symptom sym){
+		hospitals.get(id-1).getSpecialities().get(id2-1).getSymptoms().add(sym);
+    }
+	
+	public void deleteSymptom(int id, int id2, int id3){
+		hospitals.get(id-1).getSpecialities().get(id2-1).getSymptoms().remove(id3-1);
+    }
+	
+	public void showSymptoms(int id, int id2) {
+		for(int i = 0; i < hospitals.get(id-1).getSpecialities().get(id2-1).getSymptoms().size(); i++){
+			System.out.println((i + 1) + " " + hospitals.get(id-1).getSpecialities().get(id2-1).getSymptoms().get(i));
+		}
+	}
 }

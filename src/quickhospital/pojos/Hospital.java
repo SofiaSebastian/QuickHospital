@@ -103,18 +103,4 @@ public class Hospital {
 		this.specialities = specialities;
 	}
 	
-	public void addSpeciality(Speciality sp) {          
-        specialities.add(sp);
-    } 
-	
-	public void deleteSpeciality(int id){
-        specialities.remove(id-1);
-    }
-	
-	public void showSpeciality() {
-		for(int i = 0; i < specialities.size(); i++){
-            System.out.println((i + 1) + " " +specialities.get(i));
-        }
-	}
-	
 }
