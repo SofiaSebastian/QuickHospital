@@ -70,7 +70,7 @@ public class Utils {
                 stringLeida = br.readLine();
                 LocalDate fecha = LocalDate.parse(stringLeida, formatter);
                 return fecha;
-            }catch (IOException e){
+            }catch (IOException | java.time.format.DateTimeParseException e){
                 System.out.println("La fecha introducida no es correcta");
             }
         }    

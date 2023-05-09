@@ -90,14 +90,12 @@ public class Menu {
 	
 	public static void addSymptoms() {
 		try{
-			Madrid.showHospitals();
-	        int aux = Utils.leerEntero("Choose the hospital with the speciality to wich you want to add a symptom: ");
-	        Madrid.showSpecialities(aux);
-	        int aux2 = Utils.leerEntero("Choose the speciality you want to add the symptom to: ");
-	        Integer id = Madrid.getHospitals().get(aux-1).getSpecialities().get(aux2-1).getSymptoms().size()+1;
+	        //Integer id = Madrid.getHospitals().get(aux-1).getSpecialities().get(aux2-1).getSymptoms().size()+1;
 	        String name = Utils.leerCadena("Insert symptoms's name: ");
-	        Symptom sym = new Symptom(id, name);
-    		Madrid.addSymptom(aux, aux2, sym);
+	        Symptom sym = new Symptom(id, name); //quito el id del constructor no?? se pone solo?
+	        //Madrid.showSpecialities(); desde JDBC
+	        int aux = Utils.leerEntero("Choose the speciality you want to add the symptom to: ");
+	        // Madrid.addSymptom(aux, sym); desde JDBC
 		}catch(IndexOutOfBoundsException ex){
             System.out.println(ex);
         }
@@ -105,18 +103,15 @@ public class Menu {
 	
 	public static void deleteSymptoms() {
 		try{
-			Madrid.showHospitals();
-	        int aux = Utils.leerEntero("Choose the hospital with the speciality to wich you want to add a symptom: ");
-	        Madrid.showSpecialities(aux);
-	        int aux2 = Utils.leerEntero("Choose the speciality you want to delete the symptom from: ");
-			Madrid.showSymptoms(aux, aux2);
-			int aux3 = Utils.leerEntero("Choose the symptom you want to delete from the speciality: ");
-    		Madrid.deleteSymptom(aux, aux2, aux3);	
+			//Madrid.showSpecialities(); desde JDBC
+	        int aux = Utils.leerEntero("Choose the speciality you want to delete the symptom from: ");
+			//Madrid.showSymptoms(); desde JDBC
+			int aux2 = Utils.leerEntero("Choose the symptom you want to delete: ");
+    		//Madrid.deleteSymptom(aux, aux2); desde JDBC
 		}catch(IndexOutOfBoundsException ex){
             System.out.println(ex);
         }
 	}
-	
 	
 	public static int menuAdministrador(){
         

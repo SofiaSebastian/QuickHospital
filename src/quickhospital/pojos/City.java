@@ -52,6 +52,7 @@ public class City {
 		hospitals.get(id-1).getSpecialities().remove(id2-2);
     }
 	
+	//a partir de aqui sobra no??
 	public void addSymptom(int id, int id2, Symptom sym){
 		hospitals.get(id-1).getSpecialities().get(id2-1).getSymptoms().add(sym);
     }
