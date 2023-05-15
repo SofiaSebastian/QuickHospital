@@ -92,12 +92,4 @@ public class Hospital {
 		this.specialities = specialities;
 	}
 	
-	public void addSpeciality(Speciality sp) {          
-        specialities.add(sp);
-    } 
-	
-	public void deleteSpeciality(int id){
-        specialities.remove(id-1);
-    }
-	
 }
