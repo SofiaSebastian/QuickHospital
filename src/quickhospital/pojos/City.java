@@ -23,10 +23,13 @@ public class City {
 		this.hospitals = hospitals;
 	}
 	
-	public void addHospital(Integer id, String name, Integer capacity, String location, Integer administrator) {
-        Hospital h = new Hospital(id, name, capacity, location, administrator);           
+	public void addHospital(Integer id, String name, Integer capacity, String location) {
+        Hospital h = new Hospital(id, name, capacity, location);           
         hospitals.add(h);
     } 
+	public void addHospital(Hospital h) {
+		hospitals.add(h);
+	}
 	
 	public void deleteHospital(int id){
         hospitals.remove(id-1);

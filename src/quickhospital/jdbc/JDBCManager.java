@@ -1,6 +1,7 @@
 package quickhospital.jdbc;
 import java.lang.System.Logger;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.io.*;
 
@@ -54,14 +55,111 @@ public class JDBCManager implements DBManager{
 		}
 	}
 	
-	public void startProgram(){
+	public void startProgram(){// We read everything from db
 		connect();
-		createTables();
+		City madrid= new City();
+		readHospitalDB(madrid);
+		readSpecialities();
+		readSymptoms();
+		readPatients();
+		readDoctors();
+		
 	}
 	
 	
+	public void readHospitalDB(City city) {//read table Hospitals from db
+		String sql= "SELECT * FROM Hospitals";
+		
+		
+		try {
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				int id= rs.getInt("Id");
+				String name= rs.getString("Name");
+				int capacity= rs.getInt("Capacity");
+				String location =rs.getString("Location");
+				Hospital h= new Hospital(id, name,capacity,location);
+				city.addHospital(h);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
-	public void createTables() {
+	
+	public void readSpecialities() {//read table Specialities from db
+		String sql= "SELECT * FROM Specialities";
+		try {
+			ResultSet rs= stmt.executeQuery(sql);
+			while(rs.next()) {
+				int id= rs.getInt("Id");
+				String name= rs.getString("Name");
+				Speciality sp = new Speciality(id, name);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readSymptoms() { //read table Symptoms from db
+		String sql= "SELECT * FROM Symptoms";
+		try {
+			ResultSet rs = stmt.executeQuery(sql);
+			while( rs.next()) {
+				int id= rs.getInt("Id");
+				String name= rs.getString("Name");
+				Symptom s= new Symptom(id, name);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readPatients() {//read table Patients from db
+		String sql= "SELECT * FROM Patients";
+		try {
+			ResultSet rs= stmt.executeQuery(sql);
+			int id = rs.getInt("Id");
+			String name= rs.getString("Name");
+			Patient p = new Patient( id, name);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readDoctors() { //read table Doctor from db
+		String sql= "SELECT * FROM Doctors";
+		try {
+			ResultSet rs= stmt.executeQuery(sql);
+			while(rs.next()) {
+				int id = rs.getInt("Id");
+				String name= rs.getString("Name");
+				Time aT= rs.getTime("ArrivalTime");
+				Time dT= rs.getTime("DepartureTime");
+				Doctor d = new Doctor(id, name, aT, dT);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void readHospSpec(City city) {//read table Hospitals_Specialities
+		String sql= "SELECT * FROM Hospitals_Specialities";
+		ArrayList<Integer> hospID= new ArrayList<>();
+		ArrayList <Integer> spsID= new ArrayList<>();
+		try {
+			ResultSet rs= stmt.executeQuery(sql);
+			int hId=rs.getInt("Hospital_Id");
+			int spId= rs.getInt("Speciality_Id");
+			if(hId==1) {
+				city.ge
+			}
+			
+		}
+	}
+	
+	/*public void createTables() {
 		try{
 			Statement stmt1 = c.createStatement();
 			String sql1= "CREATE TABLE IF NOT EXISTS Hospitals"
@@ -139,7 +237,14 @@ public class JDBCManager implements DBManager{
 			+ "PRIMARY KEY (Patient_Id,Symptoms_Id));";
 	stmt9.executeUpdate(sql9);
 	stmt9.close();
-	}
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}*/
+	
+	
+	
 	
 	
 	

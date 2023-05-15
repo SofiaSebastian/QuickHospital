@@ -1,5 +1,6 @@
 package quickhospital.pojos;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 
  
@@ -9,15 +10,16 @@ public class Doctor {
 	//Atributes
 	private Integer id;
 	private String name;
-	private LocalDateTime arrivalTime;
-	private LocalDateTime departureTime;
+	private Time arrivalTime;
+	private Time departureTime;
 	
 	
 	//Constructors
 	public Doctor() {
 		super();
 	}
-	public Doctor(Integer id, String name, LocalDateTime arrivalTime, LocalDateTime departureTime) {
+	
+	public Doctor(Integer id, String name, Time arrivalTime, Time departureTime) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -39,16 +41,16 @@ public class Doctor {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public LocalDateTime getArrivalTime() {
+	public Time getArrivalTime() {
 		return arrivalTime;
 	}
-	public void setArrivalTime(LocalDateTime arrivalTime) {
+	public void setArrivalTime(Time arrivalTime) {
 		this.arrivalTime = arrivalTime;
 	}
-	public LocalDateTime getDepartureTime() {
+	public Time getDepartureTime() {
 		return departureTime;
 	}
-	public void setDepartureTime(LocalDateTime departureTime) {
+	public void setDepartureTime(Time departureTime) {
 		this.departureTime = departureTime;
 	}
 	public static long getSerialversionuid() {
