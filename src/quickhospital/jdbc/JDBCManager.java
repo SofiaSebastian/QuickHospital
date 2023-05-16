@@ -13,6 +13,7 @@ public class JDBCManager implements DBManager{
 	
 	private static Connection c;
 	private static Statement stmt;
+	private static ArrayList<Speciality> specialities;
 	
 	private static final String LOCATION = "./db/quickHospital.db";
 	
@@ -95,6 +96,7 @@ public class JDBCManager implements DBManager{
 				int id= rs.getInt("Id");
 				String name= rs.getString("Name");
 				Speciality sp = new Speciality(id, name);
+				specialities.add(sp);
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -143,6 +145,14 @@ public class JDBCManager implements DBManager{
 		}
 	}
 	
+	public Speciality idtoSpeciality(int id){
+        for(int i = 0; i < specialities.size(); i++){
+            if(specialities.get(i).getId() == id){
+                return specialities.get(i);
+            }
+        }
+        return null;
+    }
 	
 	public void readHospSpec(City city) {//read table Hospitals_Specialities
 		String sql= "SELECT * FROM Hospitals_Specialities";
@@ -153,16 +163,11 @@ public class JDBCManager implements DBManager{
 			while(rs.next()) {
 				int hId=rs.getInt("Hospital_Id");
 				int spId= rs.getInt("Speciality_Id");
-				city.addSpeciality(null, spId);
-					
-					
-					
+				Speciality sp = idtoSpeciality(spId);
+				city.addSpeciality(sp, hId);		
 			}
-			
-			}
-			
 		}catch(SQLException e) {
-			
+			e.printStackTrace();
 		}
 	}
 	
