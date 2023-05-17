@@ -1,7 +1,9 @@
 package quickhospital.jdbc;
 import java.lang.System.Logger;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
+import java.io.*;
 
 
 import quickhospital.ifaces.DBManager;
@@ -11,6 +13,16 @@ public class JDBCManager implements DBManager{
 	
 	private static Connection c;
 	private static Statement stmt;
+	private static ArrayList<Speciality> specialities;
+	
+	private static final String LOCATION = "./db/quickHospital.db";
+	
+	
+	
+    private static final String sqlAddCliente = "INSERT INTO Clientes(Nombre,Apellido,DNI, Email, NumTelefono, Password) VALUES (?,?,?,?,?,?);";
+    private static final String sqlAddEmpleado = "INSERT INTO Empleado(Nombre,Apellido,Puesto,Sueldo,DNI) VALUES (?,?,?,?,?);";
+    private static final String sqlAddAeropuerto = "INSERT INTO Aeropuertos(Nombre,Codigo) VALUES (?,?);";
+    private static final String sqlAddCompañia = "INSERT INTO Compañias(Nombre,PaginaWeb,Pais, NumTelefono, Email) VALUES (?,?,?,?,?);";
 	
 	private PreparedStatement prepAddHospital;
 	private PreparedStatement prepAddSpeciality;
@@ -22,15 +34,150 @@ public class JDBCManager implements DBManager{
 	
 	//final static DefaultValues defaultvalues= new DefaultValues();
 	//final static Logger TERM = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
 	
-	private static final String LOCATION = "./db/QuickHospital.db";
-	private static final String ficheroStart = "./db/ddl.sql";
-	private static final String ficheroStartAeropuerto = "./db/dml_Hospitals.sql";
-	private static final String ficheroStartCompañia = "./db/dml_Specialities.sql";
-
 	
-	//Angel tiene metidos aqui los create table...
+	public void connect() {
+		try {
+			// Open database connection
+			Class.forName("org.sqlite.JDBC");
+			Connection c = DriverManager.getConnection("jdbc:sqlite:./db/quickHospital.db");
+			c.createStatement().execute("PRAGMA foreign_keys=ON");
+			System.out.println("Database connection opened.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void disconnect() {
+		try {
+			c.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void startProgram(){// We read everything from db
+		connect();
+		City madrid= new City();
+		readHospitalDB(madrid);
+		readSpecialities();
+		readSymptoms();
+		readPatients();
+		readDoctors();
+		
+	}
+	
+	
+	public void readHospitalDB(City city) {//read table Hospitals from db
+		String sql= "SELECT * FROM Hospitals";
+		
+		
+		try {
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				int id= rs.getInt("Id");
+				String name= rs.getString("Name");
+				int capacity= rs.getInt("Capacity");
+				String location =rs.getString("Location");
+				Hospital h= new Hospital(id, name,capacity,location);
+				city.addHospital(h);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void readSpecialities() {//read table Specialities from db
+		String sql= "SELECT * FROM Specialities";
+		try {
+			ResultSet rs= stmt.executeQuery(sql);
+			while(rs.next()) {
+				int id= rs.getInt("Id");
+				String name= rs.getString("Name");
+				Speciality sp = new Speciality(id, name);
+				specialities.add(sp);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readSymptoms() { //read table Symptoms from db
+		String sql= "SELECT * FROM Symptoms";
+		try {
+			ResultSet rs = stmt.executeQuery(sql);
+			while( rs.next()) {
+				int id= rs.getInt("Id");
+				String name= rs.getString("Name");
+				Symptom s= new Symptom(id, name);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readPatients() {//read table Patients from db
+		String sql= "SELECT * FROM Patients";
+		try {
+			ResultSet rs= stmt.executeQuery(sql);
+			int id = rs.getInt("Id");
+			String name= rs.getString("Name");
+			Patient p = new Patient( id, name);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readDoctors() { //read table Doctor from db
+		String sql= "SELECT * FROM Doctors";
+		try {
+			ResultSet rs= stmt.executeQuery(sql);
+			while(rs.next()) {
+				int id = rs.getInt("Id");
+				String name= rs.getString("Name");
+				Time aT= rs.getTime("ArrivalTime");
+				Time dT= rs.getTime("DepartureTime");
+				Doctor d = new Doctor(id, name, aT, dT);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Speciality idtoSpeciality(int id){
+        for(int i = 0; i < specialities.size(); i++){
+            if(specialities.get(i).getId() == id){
+                return specialities.get(i);
+            }
+        }
+        return null;
+    }
+	
+	public void readHospSpec(City city) {//read table Hospitals_Specialities
+		String sql= "SELECT * FROM Hospitals_Specialities";
+		ArrayList<Integer> hospID= new ArrayList<>();
+		ArrayList <Integer> spsID= new ArrayList<>();
+		try {
+			ResultSet rs= stmt.executeQuery(sql);
+			while(rs.next()) {
+				int hId=rs.getInt("Hospital_Id");
+				int spId= rs.getInt("Speciality_Id");
+				Speciality sp = idtoSpeciality(spId);
+				city.addSpeciality(sp, hId);		
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public ArrayList<Symptom> getSymptoms(){ //get the symptoms from the db 
 		String sql = "SELECT * FROM Symptoms;";

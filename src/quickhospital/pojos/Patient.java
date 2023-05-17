@@ -15,6 +15,11 @@ public class Patient {
 		super();
 		this.symptoms=new ArrayList<>();
 	}
+	public Patient(Integer id,String name) {
+		this.id= id;
+		this.name= name; 
+		this.symptoms=new ArrayList<>();
+	}
 
 	//Constructors using Fields
 	public Patient(Integer id, String name, Integer speciality_id, ArrayList<Symptom> symptoms) {

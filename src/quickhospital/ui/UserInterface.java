@@ -45,8 +45,13 @@ public class UserInterface {
 
 		// UNA VEZ HECHO EL LOG IN
 
+		
+		
+		
+		
 		// SI ES PACIENTE
 		do {
+			
 			patientMenu();
 			option = Utils.leerEntero("TYPE AN OPTION:");
 
