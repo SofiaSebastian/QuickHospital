@@ -8,13 +8,13 @@ import quickhospital.utilities.Utils;
 import quickhospital.pojos.*;
 import quickhospital.jpa.JPAUserManager;
 import java.security.NoSuchAlgorithmException;
-
+import quickhospital.jdbc.*;
 public class MenuJPA {
 
 	public static DBManager dbManager;
 	public static UserManager userManager;
 
-	public static void welcome(City madrid) {
+	public static void welcome(City madrid, JDBCManager manager) {
 		System.out.println("\n\n\n\n\n\n\n\nWelcome!");
 		int option;
 		do {
@@ -25,7 +25,7 @@ public class MenuJPA {
 			option = Utils.leerEntero("Type an option");
 			switch (option) {
 			case 1:
-				newUser(madrid);
+				newUser(madrid,manager);
 				break;
 			case 2:
 				login();
@@ -39,14 +39,10 @@ public class MenuJPA {
 
 	}
 
-	private static void newUser(City madrid) {
+	private static void newUser(City madrid,JDBCManager manager) {
 		
-		System.out.println("\nRegister as a:");
-		System.out.println("\n\t1.Doctor");
-		System.out.println("\n\t2.Patient");
-		System.out.println("\n\t0.Back");
 		JPAUserManager um = new JPAUserManager();
-		//JDBCDoctorManager dm = new JDBCDoctorManager();
+		JDBCDoctorManager dm = new JDBCDoctorManager(manager);
 		//JDBCPatientManager pm = new JDBCPatientManager()
 		int option = Utils.leerEntero("Type an option");
 		switch (option) {
@@ -54,16 +50,15 @@ public class MenuJPA {
 		try{
 				//register doctor
 				Role role = um.getRole("doctor");
-				Doctor doc= new Doctor();
+				
 				//pedir atributos de doctor (setters)
 				String name= Utils.leerCadena("Introduce your name");
-				doc.setName(name);
 				madrid.showHospitals();
 				int hospitalid = Utils.leerEntero("Introduce the number of hospital you work in");
 				madrid.showSpecialities(hospitalid);
 				int specialityid = Utils.leerEntero("Introduce the number of your speciality");
-				//madrid.registerDoctor(name,hospitalid,specialityid);
-					
+				
+				
 				//USER
 				String mail = Utils.leerCadena("Introduce email");
 				String password = Utils.leerCadena("introduce password:");
@@ -73,10 +68,11 @@ public class MenuJPA {
 				User u = new User(mail, digest,role);
 				role.addUSer(u);
 				um.newUser(u); //aqui se sube a la db
-				//dm.addDoctor(doc,hospitalid,specialityid);
+				dm.newDoctor(name,hospitalid,specialityid);
+				int id= dm.getId(name);
+				Doctor doc = new Doctor(id,name);
+				//madrid.registerDoctor(name,hospitalid,specialityid, id);
 				um.disconnect();
-				
-			
 		    }catch (NoSuchAlgorithmException ex) {
 			    System.out.println(ex.getMessage());
 		    }
@@ -112,6 +108,11 @@ public class MenuJPA {
 	}
 }
 		
+
+
+// String string = Utils.leerString("Introduce paciente o doctor");
+// if (string.equalsIgnoreCase("doctor"){
+// 
 	    
 		
 	

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Speciality {
 	private static final long serialVersionUID = -1134557724257282729L;
 	
-	// Atributes
+	//Atributes
 	private Integer id;
 	private String name;
 	private ArrayList<Symptom> symptoms;

@@ -10,21 +10,27 @@ public class Doctor {
 	//Atributes
 	private Integer id;
 	private String name;
-	private Time arrivalTime;
-	private Time departureTime;
+	private Integer speciality_id;
+	private Integer hosp_id;
 	
+
 	
 	//Constructors
 	public Doctor() {
 		super();
 	}
-	
-	public Doctor(Integer id, String name, Time arrivalTime, Time departureTime) {
+	public Doctor(Integer id, String name, Integer sp, Integer hosp) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.arrivalTime = arrivalTime;
-		this.departureTime = departureTime;
+		this.hosp = hosp;
+		this.sp = sp;
+	}
+		
+	public Doctor(Integer id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
 	}
 	
 	//Getters and Setters
@@ -40,19 +46,9 @@ public class Doctor {
 	}
 	public void setName(String name) {
 		this.name = name;
+
 	}
-	public Time getArrivalTime() {
-		return arrivalTime;
-	}
-	public void setArrivalTime(Time arrivalTime) {
-		this.arrivalTime = arrivalTime;
-	}
-	public Time getDepartureTime() {
-		return departureTime;
-	}
-	public void setDepartureTime(Time departureTime) {
-		this.departureTime = departureTime;
-	}
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

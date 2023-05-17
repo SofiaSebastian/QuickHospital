@@ -11,42 +11,37 @@ import quickhospital.pojos.*;
 
 public class JDBCManager implements DBManager{
 	
-	private static Connection c;
-	private static Statement stmt;
-	private static ArrayList<Speciality> specialities;
-	
-	private static final String LOCATION = "./db/quickHospital.db";
-	
-	
-	
-    private static final String sqlAddCliente = "INSERT INTO Clientes(Nombre,Apellido,DNI, Email, NumTelefono, Password) VALUES (?,?,?,?,?,?);";
-    private static final String sqlAddEmpleado = "INSERT INTO Empleado(Nombre,Apellido,Puesto,Sueldo,DNI) VALUES (?,?,?,?,?);";
-    private static final String sqlAddAeropuerto = "INSERT INTO Aeropuertos(Nombre,Codigo) VALUES (?,?);";
-    private static final String sqlAddCompañia = "INSERT INTO Compañias(Nombre,PaginaWeb,Pais, NumTelefono, Email) VALUES (?,?,?,?,?);";
-	
-	private PreparedStatement prepAddHospital;
-	private PreparedStatement prepAddSpeciality;
-	private PreparedStatement prepAddSymptoms;
-	private PreparedStatement prepAddWaitingList;
-	private PreparedStatement prepEliminarWaitingList;
+	private Connection c = null;
+	private ArrayList<Speciality> specialities;
 
-	
+
+
 	
 	//final static DefaultValues defaultvalues= new DefaultValues();
 	//final static Logger TERM = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-	
-	
-	public void connect() {
+	public JDBCManager() {
 		try {
 			// Open database connection
 			Class.forName("org.sqlite.JDBC");
-			Connection c = DriverManager.getConnection("jdbc:sqlite:./db/quickHospital.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/quickHospital.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened.");
+			this.executeSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/ddl.sql");
+			this.startProgram();
+			this.insertSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/dml_Hospitals.sql");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	/*public void connect() {
+		
+	}*/
+	
+	public Connection getConnection() {
+		return c;
+	}
+	
 	public void disconnect() {
 		try {
 			c.close();
@@ -55,9 +50,43 @@ public class JDBCManager implements DBManager{
 			e.printStackTrace();
 		}
 	}
+
+	public void executeSQLfile (String fileName) {
+		 try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+	            String linea;
+	            Statement stmt;
+	            while ((linea = br.readLine()) != null) {
+	                // Ejecutar el comando SQL en DB Browser
+	            	stmt = c.createStatement();
+	             	stmt.executeUpdate(linea);
+	            }
+		 }catch (IOException e) {
+	            e.printStackTrace();
+	     } catch (Exception e) {
+	            e.printStackTrace();
+	     }
+	        
+	}
+	
+	public void insertSQLfile (String fileName) {
+		 try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+	            String linea;
+	            PreparedStatement p;
+	            while ((linea = br.readLine()) != null) {
+	                // Ejecutar el comando SQL en DB Browser
+	            	p = c.prepareStatement(linea);
+	            	p.executeUpdate();
+	            }
+		 }catch (IOException e) {
+	            e.printStackTrace();
+	     } catch (Exception e) {
+	            e.printStackTrace();
+	     }
+	        
+	}
+	
 	
 	public void startProgram(){// We read everything from db
-		connect();
 		City madrid= new City();
 		readHospitalDB(madrid);
 		readSpecialities();
@@ -70,9 +99,8 @@ public class JDBCManager implements DBManager{
 	
 	public void readHospitalDB(City city) {//read table Hospitals from db
 		String sql= "SELECT * FROM Hospitals";
-		
-		
 		try {
+			Statement stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
 				int id= rs.getInt("Id");
@@ -89,8 +117,11 @@ public class JDBCManager implements DBManager{
 	
 	
 	public void readSpecialities() {//read table Specialities from db
+	
 		String sql= "SELECT * FROM Specialities";
+		
 		try {
+			Statement stmt = c.createStatement();
 			ResultSet rs= stmt.executeQuery(sql);
 			while(rs.next()) {
 				int id= rs.getInt("Id");
@@ -105,7 +136,9 @@ public class JDBCManager implements DBManager{
 	
 	public void readSymptoms() { //read table Symptoms from db
 		String sql= "SELECT * FROM Symptoms";
+	
 		try {
+			Statement stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while( rs.next()) {
 				int id= rs.getInt("Id");
@@ -119,6 +152,7 @@ public class JDBCManager implements DBManager{
 	
 	public void readPatients() {//read table Patients from db
 		String sql= "SELECT * FROM Patients";
+	
 		try {
 			ResultSet rs= stmt.executeQuery(sql);
 			int id = rs.getInt("Id");
@@ -131,6 +165,7 @@ public class JDBCManager implements DBManager{
 	
 	public void readDoctors() { //read table Doctor from db
 		String sql= "SELECT * FROM Doctors";
+		
 		try {
 			ResultSet rs= stmt.executeQuery(sql);
 			while(rs.next()) {
@@ -158,6 +193,7 @@ public class JDBCManager implements DBManager{
 		String sql= "SELECT * FROM Hospitals_Specialities";
 		ArrayList<Integer> hospID= new ArrayList<>();
 		ArrayList <Integer> spsID= new ArrayList<>();
+	
 		try {
 			ResultSet rs= stmt.executeQuery(sql);
 			while(rs.next()) {
@@ -182,6 +218,7 @@ public class JDBCManager implements DBManager{
 	public ArrayList<Symptom> getSymptoms(){ //get the symptoms from the db 
 		String sql = "SELECT * FROM Symptoms;";
 		ArrayList<Symptom> symptoms = new ArrayList<>();
+	
 		try {
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {			
@@ -207,6 +244,7 @@ public class JDBCManager implements DBManager{
 		String sql="SELECT Symptoms_Id FROM Specialities_Symptoms"
 				+ "WHERE Speciality_Id == 1 ";
 		ArrayList<Integer>sId= new ArrayList<>();
+		
 		try {
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {	
@@ -356,6 +394,7 @@ public class JDBCManager implements DBManager{
 		PreparedStatement s;
 		int id=0; 
 		ArrayList<Integer> hospId= new ArrayList<>();
+		
 		try {
 			s = c.prepareStatement(sql);
 			s.setString(1, sp);
@@ -394,6 +433,7 @@ public class JDBCManager implements DBManager{
 	
 	public void addToWaitingList(Integer hospId, Integer spId, Integer patId ) {
 		String sql= "INSERT INTO WaitingList (Patient_Id, Hospital_Id, Speciality_Id) VALUES ('" + patId + "', '"+ hospId	+ "', '" + spId	+ "'); ";
+
 		try {
 			ResultSet rs = stmt.executeQuery(sql);
 		} catch (SQLException e) {
