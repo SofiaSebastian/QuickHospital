@@ -52,9 +52,8 @@ public class City {
 		hospitals.get(id-1).getSpecialities().remove(id2-2);
     }
 	
-	public void registerDoctor(String name, int id, int id2, int id3){
+	public void registerDoctor(Doctor doctor, int id, int id2){
 		int pos = hospitals.get(id-1).specialityIdtoPosition(id2);
-		Doctor doctor = new Doctor(id3, name);
 		hospitals.get(id-1).getSpecialities().get(pos).getDoctors().add(doctor);
 	}
 	
