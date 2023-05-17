@@ -23,16 +23,10 @@ public class Doctor {
 		super();
 		this.id = id;
 		this.name = name;
-		this.hosp = hosp;
-		this.sp = sp;
+		this.hosp_id = hosp;
+		this.speciality_id = sp;
 	}
 		
-	public Doctor(Integer id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
-	
 	public Doctor(Integer id, String name) {
 		super();
 		this.id = id;
