@@ -92,4 +92,13 @@ public class Hospital {
 		this.specialities = specialities;
 	}
 	
+	public int specialityIdtoPosition(int id){
+        for(int i = 0; i < specialities.size(); i++){
+            if(specialities.get(i).getId() == id){
+                return i;
+            }
+        }
+        return -1;
+    }
+		
 }

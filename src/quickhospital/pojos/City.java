@@ -47,13 +47,18 @@ public class City {
 	
 	public void showSpecialities(int id) {
 		for(int i = 0; i < hospitals.get(id-1).getSpecialities().size(); i++){
-			System.out.println((i + 1) + " " + hospitals.get(id-1).getSpecialities().get(i));
+			System.out.println(hospitals.get(id-1).getSpecialities().get(i).getId() + " " + hospitals.get(id-1).getSpecialities().get(i).getName());
 		}
 	}
 	
 	public void deleteSpeciality(int id, int id2){
 		hospitals.get(id-1).getSpecialities().remove(id2-2);
     }
+	
+	public void registerDoctor(Doctor doctor, int id, int id2){
+		int pos = hospitals.get(id-1).specialityIdtoPosition(id2);
+		hospitals.get(id-1).getSpecialities().get(pos).getDoctors().add(doctor);
+	}
 	
 	//a partir de aqui sobra no??
 	public void addSymptom(int id, int id2, Symptom sym){

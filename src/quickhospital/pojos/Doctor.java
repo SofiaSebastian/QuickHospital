@@ -33,6 +33,11 @@ public class Doctor {
 		this.name = name;
 	}
 	
+	public Doctor(Integer id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 	//Getters and Setters
 	
 	public Integer getId() {

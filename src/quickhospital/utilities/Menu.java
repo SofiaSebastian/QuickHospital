@@ -56,10 +56,10 @@ public class Menu {
 	
 	public static void addSpeciality() {
 		try{
+			//sacar el id de db
 			Madrid.showHospitals();
             int aux = Utils.leerEntero("Choose the hospital you want to add the speciality: "); 
             if(Madrid.getHospitals().get(aux-1) != null){
-                Integer id = Madrid.getHospitals().get(aux-1).getSpecialities().size()+1;
                 String name = Utils.leerCadena("Insert speciality's name: ");
                 Speciality sp = new Speciality(id, name);
                 Madrid.addSpeciality(sp, aux);
@@ -79,7 +79,8 @@ public class Menu {
             if(Madrid.getHospitals().get(aux-1) != null){
                 Madrid.showSpecialities(aux);
                 int aux2 = Utils.leerEntero("Choose the speciality you want to delete: "); 
-                Madrid.deleteSpeciality(aux, aux2);
+                int pos = Madrid.getHospitals().get(aux-1).specialityIdtoPosition(aux2);
+                Madrid.deleteSpeciality(aux, pos);
             }else{
                 System.out.println("This hospital doesn't exist!");
             }
