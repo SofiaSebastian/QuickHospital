@@ -8,6 +8,7 @@ import java.io.*;
 
 import quickhospital.ifaces.DBManager;
 import quickhospital.pojos.*;
+import quickhospital.ui.Main;
 
 public class JDBCManager implements DBManager{
 	
@@ -34,9 +35,7 @@ public class JDBCManager implements DBManager{
 		}
 	}
 	
-	/*public void connect() {
-		
-	}*/
+	
 	
 	public Connection getConnection() {
 		return c;
@@ -86,74 +85,14 @@ public class JDBCManager implements DBManager{
 	}
 	
 	
-	public void startProgram(){// We read everything from db
-		City madrid= new City();
-		readHospitalDB(madrid);
-		readSpecialities();
-		readSymptoms();
-		readPatients();
-		readDoctors();
-		
-	}
+
 	
-	
-	public void readHospitalDB(City city) {//read table Hospitals from db
-		String sql= "SELECT * FROM Hospitals";
-		try {
-			Statement stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				int id= rs.getInt("Id");
-				String name= rs.getString("Name");
-				int capacity= rs.getInt("Capacity");
-				String location =rs.getString("Location");
-				Hospital h= new Hospital(id, name,capacity,location);
-				city.addHospital(h);
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	public void readSpecialities() {//read table Specialities from db
-	
-		String sql= "SELECT * FROM Specialities";
-		
-		try {
-			Statement stmt = c.createStatement();
-			ResultSet rs= stmt.executeQuery(sql);
-			while(rs.next()) {
-				int id= rs.getInt("Id");
-				String name= rs.getString("Name");
-				Speciality sp = new Speciality(id, name);
-				specialities.add(sp);
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void readSymptoms() { //read table Symptoms from db
-		String sql= "SELECT * FROM Symptoms";
-	
-		try {
-			Statement stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			while( rs.next()) {
-				int id= rs.getInt("Id");
-				String name= rs.getString("Name");
-				Symptom s= new Symptom(id, name);
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public void readPatients() {//read table Patients from db
 		String sql= "SELECT * FROM Patients";
 	
 		try {
+			
 			ResultSet rs= stmt.executeQuery(sql);
 			int id = rs.getInt("Id");
 			String name= rs.getString("Name");
@@ -163,31 +102,8 @@ public class JDBCManager implements DBManager{
 		}
 	}
 	
-	public void readDoctors() { //read table Doctor from db
-		String sql= "SELECT * FROM Doctors";
-		
-		try {
-			ResultSet rs= stmt.executeQuery(sql);
-			while(rs.next()) {
-				int id = rs.getInt("Id");
-				String name= rs.getString("Name");
-				Time aT= rs.getTime("ArrivalTime");
-				Time dT= rs.getTime("DepartureTime");
-				Doctor d = new Doctor(id, name, aT, dT);
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
 	
-	public Speciality idtoSpeciality(int id){
-        for(int i = 0; i < specialities.size(); i++){
-            if(specialities.get(i).getId() == id){
-                return specialities.get(i);
-            }
-        }
-        return null;
-    }
+
 	
 	public void readHospSpec(City city) {//read table Hospitals_Specialities
 		String sql= "SELECT * FROM Hospitals_Specialities";
@@ -195,11 +111,12 @@ public class JDBCManager implements DBManager{
 		ArrayList <Integer> spsID= new ArrayList<>();
 	
 		try {
+			Statement stmt= this.getConnection().createStatement();
 			ResultSet rs= stmt.executeQuery(sql);
 			while(rs.next()) {
 				int hId=rs.getInt("Hospital_Id");
 				int spId= rs.getInt("Speciality_Id");
-				Speciality sp = idtoSpeciality(spId);
+				Speciality sp = Main.idtoSpeciality(spId);
 				city.addSpeciality(sp, hId);		
 			}
 		}catch(SQLException e) {
@@ -215,22 +132,7 @@ public class JDBCManager implements DBManager{
 	
 	
 	
-	public ArrayList<Symptom> getSymptoms(){ //get the symptoms from the db 
-		String sql = "SELECT * FROM Symptoms;";
-		ArrayList<Symptom> symptoms = new ArrayList<>();
 	
-		try {
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()) {			
-				int id = rs.getInt("Id");
-				String nombre = rs.getString("Nombre");
-				symptoms.add(new Symptom(id, nombre));
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return symptoms;
-	}
 	
 	public void showSymptoms(ArrayList<Symptom> symp) {
         for (int i = 0; i < symp.size(); i++) {
