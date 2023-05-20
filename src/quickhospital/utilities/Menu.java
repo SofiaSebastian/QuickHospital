@@ -23,14 +23,7 @@ public class Menu {
                     break;
                 case 4:
                     deleteSpeciality();
-                    break;
-                case 5:
-                    addSymptoms();
-                    break;
-                case 6:
-                    deleteSymptoms();
-                    break;
-                           
+                    break;                           
             }
         }while(opcion != 0);
     }
@@ -40,8 +33,7 @@ public class Menu {
 		String name = Utils.leerCadena("Insert hospital's name: ");
 		Integer capacity = Utils.leerEntero("\"Insert hospital's capacity: ");
 		String location = Utils.leerCadena("Insert hospital's location: ");
-		Integer administrator = Utils.leerEntero("Insert hospital's administrator id: ");
-		Madrid.addHospital(id, name, capacity, location, administrator);
+		Madrid.addHospital(id, name, capacity, location);
 	}
 	
 	public static void deleteHospital() {
@@ -89,31 +81,6 @@ public class Menu {
         }
 	}
 	
-	public static void addSymptoms() {
-		try{
-	        //Integer id = Madrid.getHospitals().get(aux-1).getSpecialities().get(aux2-1).getSymptoms().size()+1;
-	        String name = Utils.leerCadena("Insert symptoms's name: ");
-	        Symptom sym = new Symptom(id, name); //quito el id del constructor no?? se pone solo?
-	        //Madrid.showSpecialities(); desde JDBC
-	        int aux = Utils.leerEntero("Choose the speciality you want to add the symptom to: ");
-	        // Madrid.addSymptom(aux, sym); desde JDBC
-		}catch(IndexOutOfBoundsException ex){
-            System.out.println(ex);
-        }
-	}
-	
-	public static void deleteSymptoms() {
-		try{
-			//Madrid.showSpecialities(); desde JDBC
-	        int aux = Utils.leerEntero("Choose the speciality you want to delete the symptom from: ");
-			//Madrid.showSymptoms(); desde JDBC
-			int aux2 = Utils.leerEntero("Choose the symptom you want to delete: ");
-    		//Madrid.deleteSymptom(aux, aux2); desde JDBC
-		}catch(IndexOutOfBoundsException ex){
-            System.out.println(ex);
-        }
-	}
-	
 	public static int menuAdministrador(){
         
         int opcion = 0;
@@ -125,12 +92,10 @@ public class Menu {
             System.out.println("2. Delete Hospital");
             System.out.println("3. Add Speciality");
             System.out.println("4. Delete Speciality");
-            System.out.println("5. Add Symptoms");
-            System.out.println("6. Delete Symptoms");
 
             opcion = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
             
-        }while(opcion > 6 || opcion < 0);
+        }while(opcion > 4 || opcion < 0);
     
         return opcion;    
     }    

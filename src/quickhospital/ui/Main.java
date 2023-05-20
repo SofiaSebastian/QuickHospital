@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import quickhospital.jdbc.JDBCDoctorManager;
+import quickhospital.jdbc.JDBCHospitalManager;
 import quickhospital.jdbc.JDBCManager;
 import quickhospital.jdbc.JDBCSpecialityManager;
 import quickhospital.jdbc.JDBCSymptomsManager;
@@ -17,14 +18,17 @@ public class Main {
 	
 	private static ArrayList<Symptom> symptoms;
 	private static ArrayList<Speciality> specialities;
+	private static ArrayList<Hospital> hospitals;
+	private static City madrid;
 	
 	public static void main(String args[]) {
 		JDBCManager manager = new JDBCManager();
 		JDBCSymptomsManager sym = new JDBCSymptomsManager(manager);
 		JDBCSpecialityManager spe = new JDBCSpecialityManager(manager);
+		JDBCHospitalManager h = new JDBCHospitalManager(manager); //no se si hace falta porque con la clase City ya se puede hacer cosas
 		symptoms = sym.readSymptoms();
 		specialities = spe.readSpecialities();
-		
+		hospitals = h.readHospitalDB(); //hace falta??
 		
 		
 		//manager.executeSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/dml_Hospitals.sql");
@@ -101,7 +105,15 @@ public class Main {
             }
         }
         
-        return specialities.get(maximo);
+        int pos = 0;
+        
+        for(int i = 0; i < cont.length; i++){
+            if(cont[i] == maximo){
+                pos = i;
+            }
+        }
+        
+        return specialities.get(pos);
 	}
 	
 	public static Speciality idtoSpeciality(int id) {
