@@ -100,5 +100,11 @@ public class Hospital {
         }
         return -1;
     }
+
+	@Override
+	public String toString() {
+		return  id + ". " + name + "( Capacity: " + capacity + ", Location: " + location + ")";
+	}
+	
 		
 }

@@ -19,9 +19,11 @@ public class Menu {
                     deleteHospital();
                     break;
                 case 3:
-                    addSpeciality();
-                    break;
+                	break;
                 case 4:
+                    //addSpeciality();
+                    break;
+                case 5:
                     deleteSpeciality();
                     break;                           
             }
@@ -46,13 +48,13 @@ public class Menu {
         }
 	}
 	
-	public static void addSpeciality() {
+	public static void addExistingSpecialityToHospital() { //cambiar esto
 		try{
 			//sacar el id de db
 			Madrid.showHospitals();
             int aux = Utils.leerEntero("Choose the hospital you want to add the speciality: "); 
             if(Madrid.getHospitals().get(aux-1) != null){
-                String name = Utils.leerCadena("Insert speciality's name: ");
+                String name = Utils.leerCadena("Insert speciality's name: ");            
                 Speciality sp = new Speciality(id, name);
                 Madrid.addSpeciality(sp, aux);
             }else{
@@ -62,7 +64,6 @@ public class Menu {
             System.out.println(ex);
         }
 	}
-	
 	
 	public static void deleteSpeciality() {
 		try{
@@ -90,12 +91,13 @@ public class Menu {
             System.out.println("Menu");
             System.out.println("1. Add Hospital");
             System.out.println("2. Delete Hospital");
-            System.out.println("3. Add Speciality");
+            System.out.println("3. Add new Speciality");
+            System.out.println("3. Add existing Speciality to a Hospital");
             System.out.println("4. Delete Speciality");
 
             opcion = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
             
-        }while(opcion > 4 || opcion < 0);
+        }while(opcion > 5 || opcion < 0);
     
         return opcion;    
     }    

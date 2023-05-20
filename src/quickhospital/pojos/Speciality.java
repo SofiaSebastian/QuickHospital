@@ -88,6 +88,11 @@ public class Speciality {
 
 	public void setWaitingList(WaitingList waitingList) {
 		this.waitingList = waitingList;
+	}
+
+	@Override
+	public String toString() {
+		return id + ". " + name;
 	} 
 
 }
