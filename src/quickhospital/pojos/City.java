@@ -22,11 +22,7 @@ public class City {
 	public void setHospitals(ArrayList<Hospital> hospitals) {
 		this.hospitals = hospitals;
 	}
-	
-	public void addHospital(Integer id, String name, Integer capacity, String location) {
-        Hospital h = new Hospital(id, name, capacity, location);           
-        hospitals.add(h);
-    } 
+
 	public void addHospital(Hospital h) {
 		hospitals.add(h);
 	}

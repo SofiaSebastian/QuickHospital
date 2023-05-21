@@ -16,7 +16,7 @@ public class Main {
 	private static ArrayList<Symptom> symptoms;
 	private static ArrayList<Speciality> specialities;
 	private static ArrayList<Hospital> hospitals;
-	private static City Madrid;
+	//private static City Madrid;
 	private static ArrayList<Doctor> doctors;
 	private static ArrayList<Patient> patients;
 	
@@ -34,7 +34,7 @@ public class Main {
 		spe.readSpecSymp();
 		patients= p.readPatients();
 		doctors=d.readDoctors();
-		Madrid.setHospitals(hospitals); // Hacemos esto o quitamos madrid?
+		//Madrid.setHospitals(hospitals); // Hacemos esto o quitamos madrid?
 		
 		
 		//manager.executeSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/dml_Hospitals.sql");
@@ -52,7 +52,7 @@ public class Main {
 					option= doctorMenu();
 					switch(option) {
 					case 1:
-						
+						//showWaitingList(h_id, sp_id)
 						break;
 					case 2: 
 						//Log out
@@ -93,6 +93,8 @@ public class Main {
 						sp = compareSymptoms(symptomsPatient);	
 						showHospitalsWithSelectedSpeciality(sp);
 						int id = Utils.leerEntero("Select the id of the hospital you wish to attend: ");
+						//showAppointment(h_id, sp_id)
+						//addToWaitingList(h_id, s_id, patient)
 						//ahora con esto conseguir el waiting list
 
 						break;
@@ -183,8 +185,19 @@ public class Main {
 
 	}
 	
+	public static void registerDoctor(Doctor doctor, int id, int id2){
+		int pos = hospitals.get(id-1).specialityIdtoPosition(id2);
+		hospitals.get(id-1).getSpecialities().get(pos).getDoctors().add(doctor);
+	}
+	
 	
 	//FUNCIONES DE HOSPITALS
+	
+	public static void showHospitals() {
+		for(int i = 0; i < hospitals.size(); i++){
+            System.out.println((i + 1) + " " +hospitals.get(i));
+        }
+	}
 	
 	public static void showHospitalsWithSelectedSpeciality(Speciality sp) {
 		for(int i = 0; i < hospitals.size(); i++) {
@@ -193,6 +206,7 @@ public class Main {
 			}
 		}
 	}
+	
 	public static Hospital idToHospital(int id) {
 		for(int i = 0; i < hospitals.size(); i++) {
 			if(hospitals.get(i).getId() == id) {
@@ -203,7 +217,6 @@ public class Main {
 		return null;		
 	}
 	
-	
 	public static void addSpeciality(Speciality s, Hospital h) {//add speciality to hospital while reading table Hospital Specialities
 		for(int i= 0; i<hospitals.size(); i++) {
 			if(hospitals.get(i).equals(h)) {
@@ -212,6 +225,7 @@ public class Main {
 		}
 	}
 	
+	
 	//FUNCIONES DE SPECIALITIES
 	
 	public static void showSpecialities() {  
@@ -219,6 +233,12 @@ public class Main {
             System.out.println(specialities.get(i));
         }
     }
+	
+	public static void showSpecialitiesFromAHospital(int id) {
+		for(int i = 0; i < hospitals.get(id-1).getSpecialities().size(); i++){
+			System.out.println(hospitals.get(id-1).getSpecialities().get(i).getId() + " " + hospitals.get(id-1).getSpecialities().get(i).getName());
+		}
+	}
 	
 	public static Speciality idToSpeciality(int id) {
 		for(int i = 0; i < specialities.size(); i++) {
@@ -309,25 +329,23 @@ public class Main {
 	
 	
 	
-	
 	//FUNCIONES DEL ADMINISTRADOR
 	
 	public static void addHospital() {
-		Integer id = Madrid.getHospitals().size()+1;// yo quitaria la clase city y haria hospitals.size()+1
+		Integer id = hospitals.size()+1;// yo quitaria la clase city y haria hospitals.size()+1
 		String name = Utils.leerCadena("Insert hospital's name: ");
 		Integer capacity = Utils.leerEntero("\"Insert hospital's capacity: ");
 		String location = Utils.leerCadena("Insert hospital's location: ");
-		Hospital h = new Hospital(id, name, capacity, location);
-		Madrid.addHospital(h); 
+		Hospital h = new Hospital(id, name, capacity, location); 
 		hospitals.add(h);
 		//añadir tambien a la base de datos
 	}
 	
 	public static void deleteHospital() {
 		try{
-            Madrid.showHospitals();
+            showHospitals();
             int aux = Utils.leerEntero("Choose the hospital you want to delete: ");
-            Madrid.deleteHospital(aux);
+            hospitals.remove(aux-1);
         }catch(IndexOutOfBoundsException ex){
             System.out.println(ex);
         }
@@ -344,12 +362,12 @@ public class Main {
 	
 	public static void addExistingSpecialityToHospital() { 
 		try{
-			Madrid.showHospitals();
+			showHospitals();
             int aux = Utils.leerEntero("Choose the hospital you want to add the speciality: "); 
-            if(Madrid.getHospitals().get(aux-1) != null){
+            if(hospitals.get(aux-1) != null){
                 int id = Utils.leerEntero("Insert speciality's id: ");
                 Speciality sp = idToSpeciality(id);
-                Madrid.addSpeciality(sp, aux);
+                hospitals.get(aux-1).getSpecialities().add(sp);
             }else{
                 System.out.println("This hospital doesn't exist!");
             }
@@ -361,13 +379,13 @@ public class Main {
 	
 	public static void deleteSpeciality() {
 		try{
-			Madrid.showHospitals();
+			showHospitals();
             int aux = Utils.leerEntero("Choose the hospital you want to delete the speciality: "); 
-            if(Madrid.getHospitals().get(aux-1) != null){
-                Madrid.showSpecialities(aux);
+            if(hospitals.get(aux-1) != null){
+            	showSpecialitiesFromAHospital(aux);
                 int aux2 = Utils.leerEntero("Choose the speciality you want to delete: "); 
-                int pos = Madrid.getHospitals().get(aux-1).specialityIdtoPosition(aux2);
-                Madrid.deleteSpeciality(aux, pos);
+                int pos = hospitals.get(aux-1).specialityIdtoPosition(aux2);
+                hospitals.get(aux-1).getSpecialities().remove(pos);
             }else{
                 System.out.println("This hospital doesn't exist!");
             }
@@ -411,7 +429,8 @@ public class Main {
 		int opcion = 0;
 		
 		do {
-			System.out.println("1.View waitingList(List of patients of the day:");
+			System.out.println("1.View waitingList(List of patients of the day:"); 
+			//View Patient Symptoms??
 			System.out.println("2.Log out");
 			opcion = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
 		}while(opcion > 2 || opcion < 0);
