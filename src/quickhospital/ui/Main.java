@@ -2,6 +2,9 @@ package quickhospital.ui;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.lang.*;
 
@@ -148,6 +151,11 @@ public class Main {
 		// UNA VEZ HECHO EL LOG IN
 
 	}
+	
+	
+	
+	
+	
 	
 	public void registerDoctor(City madrid, JDBCManager manager) {
 		JPAUserManager um = new JPAUserManager();
@@ -393,7 +401,26 @@ public class Main {
             System.out.println(ex);
         }
 	}
+	//PATIENT
+	public static Patient idToPatient(int id){
+		for (int i = 0; i < patients.size(); i++){
+			if (patients.get(i).getId() == id){
+				return patients.get(i);
+			}
+		}
+		return null;
+	}
 	
+	//DATES
+	public static LocalDate stringToDate(String d) {
+		LocalDate date=LocalDate.parse(d,DateTimeFormatter.ofPattern("yyyy-MM-d"));
+		return date;
+		
+	}
+	public static LocalTime stringToTime(String t) {
+		LocalTime time= LocalTime.parse(t, DateTimeFormatter.ofPattern("H:mm:ss.SSSSSS"));
+		return time;
+	}
 	
 	//MENUS
 	

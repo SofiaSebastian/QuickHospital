@@ -1,70 +1,100 @@
 package quickhospital.pojos;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.*;
+import java.util.*;
+import java.sql.*;
+
 
 public class WaitingList {
 	private static final long serialVersionUID = -980840724257282729L;
 	//Atributes
-	private Integer id;
-	private ArrayList<LocalDateTime>  appointment;
+	private LocalDate date;
+	private ArrayList<LocalTime> time;
 	private ArrayList<Patient> patients; 
-	private boolean status;
+	private Integer hosp_Id;
+	private Integer sp_Id;
 	
+	
+	
+	public Integer getHosp_Id() {
+		return hosp_Id;
+	}
+
+	public void setHosp_Id(Integer hosp_Id) {
+		this.hosp_Id = hosp_Id;
+	}
+
+	public Integer getSp_Id() {
+		return sp_Id;
+	}
+
+	public void setSp_Id(Integer sp_Id) {
+		this.sp_Id = sp_Id;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
 	//Constructors
 	public WaitingList() {
 		super();
-		this.appointment= new ArrayList<>();
+		this.time= new ArrayList<>();
 		this.patients= new ArrayList<>();
 	}
 
-	public WaitingList(Integer id, ArrayList<LocalDateTime> appointment, ArrayList<Patient> patients, boolean status) {
+	public WaitingList(ArrayList<LocalTime> time, ArrayList<Patient> patients) {
 		super();
-		this.id = id;
-		this.appointment = appointment;
+		this.time = time;
 		this.patients = patients;
-		this.status = status;
 	}
-
-	public WaitingList(Integer id, boolean status) {
+	public WaitingList(LocalDate date, Integer hosp_id, Integer sp_id) {
 		super();
-		this.id = id;
-		this.status = status;
-		this.appointment= new ArrayList<>();
+		this.date=date;
+		this.hosp_Id=hosp_id;
+		this.sp_Id=sp_id;
+		this.time= new ArrayList<>();
 		this.patients= new ArrayList<>();
 	}
+
+	
+	public WaitingList(LocalDate date,ArrayList<LocalTime> time, ArrayList<Patient> patients, Integer hosp_Id, Integer sp_Id) {
+		super();
+		this.date=date;
+		this.time = time;
+		this.patients = patients;
+		this.hosp_Id = hosp_Id;
+		this.sp_Id = sp_Id;
+	}
+	public void addPatient(Patient p) {
+		this.patients.add(p);
+	}
+	
+	public void addTime(LocalTime t) {
+		this.time.add(t);
+	}
+
 	//Getters and Setters
 
-	public Integer getId() {
-		return id;
+	public ArrayList<LocalTime> getTime() {
+		return this.time;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public ArrayList<LocalDateTime> getAppointment() {
-		return appointment;
-	}
-
-	public void setAppointment(ArrayList<LocalDateTime> appointment) {
-		this.appointment = appointment;
+	public void setTime(ArrayList<LocalTime> time) {
+		this.time = time;
 	}
 
 	public ArrayList<Patient> getPatients() {
-		return patients;
+		return this.patients;
 	}
 
 	public void setPatients(ArrayList<Patient> patients) {
 		this.patients = patients;
 	}
 
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
 	
 	
 	

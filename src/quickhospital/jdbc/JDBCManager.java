@@ -13,11 +13,6 @@ import quickhospital.ui.Main;
 public class JDBCManager implements DBManager{
 	
 	private Connection c = null;
-	private ArrayList<Speciality> specialities;
-
-
-
-	
 	//final static DefaultValues defaultvalues= new DefaultValues();
 	//final static Logger TERM = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	public JDBCManager() {
@@ -27,9 +22,7 @@ public class JDBCManager implements DBManager{
 			c = DriverManager.getConnection("jdbc:sqlite:./db/quickHospital.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened.");
-			this.executeSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/ddl.sql");
-			//start program
-			this.insertSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/dml_Hospitals.sql");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,7 +43,7 @@ public class JDBCManager implements DBManager{
 		}
 	}
 
-	public void executeSQLfile (String fileName) {
+	/*public void executeSQLfile (String fileName) {
 		 try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
 	            String linea;
 	            Statement stmt;
@@ -82,7 +75,7 @@ public class JDBCManager implements DBManager{
 	            e.printStackTrace();
 	     }
 	        
-	}
+	}*/
 	
 
 	public void showSymptoms(ArrayList<Symptom> symp) {
