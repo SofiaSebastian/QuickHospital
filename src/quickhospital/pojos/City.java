@@ -59,19 +59,4 @@ public class City {
 		int pos = hospitals.get(id-1).specialityIdtoPosition(id2);
 		hospitals.get(id-1).getSpecialities().get(pos).getDoctors().add(doctor);
 	}
-	
-	//a partir de aqui sobra no??
-	public void addSymptom(int id, int id2, Symptom sym){
-		hospitals.get(id-1).getSpecialities().get(id2-1).getSymptoms().add(sym);
-    }
-	
-	public void deleteSymptom(int id, int id2, int id3){
-		hospitals.get(id-1).getSpecialities().get(id2-1).getSymptoms().remove(id3-1);
-    }
-	
-	public void showSymptoms(int id, int id2) {
-		for(int i = 0; i < hospitals.get(id-1).getSpecialities().get(id2-1).getSymptoms().size(); i++){
-			System.out.println((i + 1) + " " + hospitals.get(id-1).getSpecialities().get(id2-1).getSymptoms().get(i));
-		}
-	}
 }
