@@ -38,6 +38,7 @@ public class JDBCDoctorManager {
 		}
 		return doctors;
 	}
+	
 	public void newDoctor (String name, int hospitalid, int specialityid) {
 		String sql= "INSERT INTO Doctors (Name, Hospital_Id, Speciality_Id) VALUES (?,?,?)";
 		try {

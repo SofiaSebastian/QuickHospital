@@ -1,13 +1,9 @@
 package quickhospital.jdbc;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-
-import quickhospital.pojos.Speciality;
+import java.sql.*;
+import java.util.*;
+import quickhospital.pojos.*;
+import quickhospital.ui.*;
 
 public class JDBCSpecialityManager {
 	private JDBCManager manager;
@@ -34,6 +30,26 @@ public class JDBCSpecialityManager {
 			e.printStackTrace();
 		}
 		return specialities;
+	}
+	
+	public void readSpecSymp() {//read table Specialities_Symptoms
+		String sql= "SELECT * FROM Specialities_Symptoms";
+		ArrayList<Integer> symId= new ArrayList<>();
+		ArrayList <Integer> spsID= new ArrayList<>();
+	
+		try {
+			Statement stmt= manager.getConnection().createStatement();
+			ResultSet rs= stmt.executeQuery(sql);
+			while(rs.next()) {
+				int spId= rs.getInt("Speciality_Id");
+				int syId=rs.getInt("Symptoms_id");
+				Speciality sp = Main.idToSpeciality(spId);	
+				Symptom s= Main.idtoSymptom(syId);
+				Main.addSymptom(s, sp);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int getId(String name) {

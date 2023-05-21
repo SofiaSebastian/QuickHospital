@@ -3,16 +3,13 @@ package quickhospital.ui;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.lang.*;
 
-import quickhospital.ifaces.DBManager;
-import quickhospital.jdbc.JDBCDoctorManager;
-import quickhospital.jdbc.JDBCHospitalManager;
-import quickhospital.jdbc.JDBCManager;
-import quickhospital.jdbc.JDBCSpecialityManager;
-import quickhospital.jdbc.JDBCSymptomsManager;
-import quickhospital.jpa.JPAUserManager;
+import quickhospital.ifaces.*;
+import quickhospital.jdbc.*;
+import quickhospital.jpa.*;
 import quickhospital.pojos.*;
-import quickhospital.utilities.Utils;
+import quickhospital.utilities.*;
 
 public class Main {
 	
@@ -20,31 +17,57 @@ public class Main {
 	private static ArrayList<Speciality> specialities;
 	private static ArrayList<Hospital> hospitals;
 	private static City Madrid;
+	private static ArrayList<Doctor> doctors;
+	private static ArrayList<Patient> patients;
 	
 	public static void main(String args[]) {
 		JDBCManager manager = new JDBCManager();
 		JDBCSymptomsManager sym = new JDBCSymptomsManager(manager);
 		JDBCSpecialityManager spe = new JDBCSpecialityManager(manager);
 		JDBCHospitalManager h = new JDBCHospitalManager(manager); 
+		JDBCPatientManager p= new JDBCPatientManager(manager);
+		JDBCDoctorManager d= new JDBCDoctorManager(manager);
 		specialities = spe.readSpecialities();
 		hospitals = h.readHospitalDB(); 
+		symptoms=sym.readSymptoms();
+		h.readHospSpec();
+		spe.readSpecSymp();
+		patients= p.readPatients();
+		doctors=d.readDoctors();
+		Madrid.setHospitals(hospitals); // Hacemos esto o quitamos madrid?
 		
 		
 		//manager.executeSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/dml_Hospitals.sql");
-		//manager.startProgram();
+		
 		
 		int option;
 		String read;
-		//Leer create tables y insert************
 		do {
 			firstMenu();
 			option = firstMenu();
 			
 			switch(option) {
-			case 1: //si es administrator 
+			case 1: //Doctor 
+				do {
+					option= doctorMenu();
+					switch(option) {
+					case 1:
+						
+						break;
+					case 2: 
+						//Log out
+						manager.disconnect();
+						//salir del jpa
+						System.out.println("BYE, THANKS FOR USING QUICKHOSPITAL!!");
+						System.exit(0);
+						break;
+					}
+					
+					
+				}while(option<1|| option>2);
 				break;
 			
-			case 2: // si es paciente
+			case 2: //Patient
 				do {
 					option = patientMenu();
 					switch (option) {
@@ -82,7 +105,7 @@ public class Main {
 				} while (option != 0);
 				break;
 				
-			case 3:
+			case 3://Administrator
 				do {
 					option = administratorMenu();
 					switch(option){
@@ -157,7 +180,24 @@ public class Main {
 			}
 		}
 	}
+	public static Hospital idToHospital(int id) {
+		for(int i = 0; i < hospitals.size(); i++) {
+			if(hospitals.get(i).getId() == id) {
+				return hospitals.get(i);
+			}
+		}
+		
+		return null;		
+	}
 	
+	
+	public static void addSpeciality(Speciality s, Hospital h) {//add speciality to hospital while reading table Hospital Specialities
+		for(int i= 0; i<hospitals.size(); i++) {
+			if(hospitals.get(i).equals(h)) {
+				hospitals.get(i).addSpeciality(s);
+			}
+		}
+	}
 	
 	//FUNCIONES DE SPECIALITIES
 	
@@ -175,6 +215,14 @@ public class Main {
 		}
 		
 		return null;		
+	}
+	
+	public static void addSymptom(Symptom s, Speciality sp) {
+		for(int i= 0; i<specialities.size(); i++) {
+			if(specialities.get(i).equals(sp)) {
+				specialities.get(i).addSymptom(s);
+			}
+		}
 	}
 	
 	
@@ -237,20 +285,22 @@ public class Main {
         return specialities.get(pos);
 	}
 	
-	public static Speciality idtoSpeciality(int id) {
-		for (int i = 0; i < specialities.size(); i++) {
+	public static Symptom idtoSymptom(int id) {
+		for (int i = 0; i < symptoms.size(); i++) {
 			if (specialities.get(i).getId() == id) {
-				return specialities.get(i);
+				return symptoms.get(i);
 			}
 		}
 		return null;
 	}
 	
 	
+	
+	
 	//FUNCIONES DEL ADMINISTRADOR
 	
 	public static void addHospital() {
-		Integer id = Madrid.getHospitals().size()+1;
+		Integer id = Madrid.getHospitals().size()+1;// yo quitaria la clase city y haria hospitals.size()+1
 		String name = Utils.leerCadena("Insert hospital's name: ");
 		Integer capacity = Utils.leerEntero("\"Insert hospital's capacity: ");
 		String location = Utils.leerCadena("Insert hospital's location: ");
@@ -335,7 +385,7 @@ public class Main {
 		
 		do {
 			System.out.println("1.Insert symptoms");
-			System.out.println("2.Abandom Waiting List");
+			System.out.println("2.Abandom Waiting List");//deberiamos subir la posicion de todos en la waiting list
 			System.out.println("3.Log out");
 		}while(opcion > 3 || opcion < 0);
 		//get the report of the waiting list
@@ -347,12 +397,25 @@ public class Main {
 		int opcion = 0;
 		
 		do {
-			System.out.println("1.Change timetable");
+			System.out.println("1.View waitingList(List of patients of the day:");
 			System.out.println("2.Log out");
 			opcion = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
 		}while(opcion > 2 || opcion < 0);
 		
 		return opcion;
+	}
+	
+	public static int doctorMenu2() {
+		int option=0;
+		do {
+			System.out.println("You can view patient symptoms");
+			System.out.println("1. Search patient by name:");
+			System.out.println("2. Search patient by id:");
+			System.out.println("3. Return");
+		}while(option<1|| option>3);
+		
+		return option;
+		
 	}
 	
 	public static int administratorMenu(){
@@ -368,9 +431,9 @@ public class Main {
             System.out.println("4. Add existing Speciality to a Hospital");
             System.out.println("5. Delete Speciality");
 
-            opcion = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
+            opcion = Utils.leerEntero("Introduce an option (0 to exit): ");
             
-        }while(opcion > 5 || opcion < 0);
+        }while(opcion > 5 || opcion < 1);
     
         return opcion;    
     }

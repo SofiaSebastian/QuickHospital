@@ -28,7 +28,7 @@ public class JDBCManager implements DBManager{
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened.");
 			this.executeSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/ddl.sql");
-			this.startProgram();
+			//start program
 			this.insertSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/dml_Hospitals.sql");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,56 +84,7 @@ public class JDBCManager implements DBManager{
 	        
 	}
 	
-	
 
-	
-	
-	public void readPatients() {//read table Patients from db
-		String sql= "SELECT * FROM Patients";
-	
-		try {
-			
-			ResultSet rs= stmt.executeQuery(sql);
-			int id = rs.getInt("Id");
-			String name= rs.getString("Name");
-			Patient p = new Patient( id, name);
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-
-	
-	public void readHospSpec(City city) {//read table Hospitals_Specialities
-		String sql= "SELECT * FROM Hospitals_Specialities";
-		ArrayList<Integer> hospID= new ArrayList<>();
-		ArrayList <Integer> spsID= new ArrayList<>();
-	
-		try {
-			Statement stmt= this.getConnection().createStatement();
-			ResultSet rs= stmt.executeQuery(sql);
-			while(rs.next()) {
-				int hId=rs.getInt("Hospital_Id");
-				int spId= rs.getInt("Speciality_Id");
-				Speciality sp = Main.idtoSpeciality(spId);
-				city.addSpeciality(sp, hId);		
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public void showSymptoms(ArrayList<Symptom> symp) {
         for (int i = 0; i < symp.size(); i++) {
             Symptom s = symp.get(i);
@@ -141,7 +92,7 @@ public class JDBCManager implements DBManager{
         }
     }
 	
-	public String compareSymptoms(ArrayList<Integer> nums) {
+	/*public String compareSymptoms(ArrayList<Integer> nums) {
 	
 		String sql="SELECT Symptoms_Id FROM Specialities_Symptoms"
 				+ "WHERE Speciality_Id == 1 ";
@@ -331,17 +282,42 @@ public class JDBCManager implements DBManager{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		};
-	}
+	}*/
 	
 	public void addToWaitingList(Integer hospId, Integer spId, Integer patId ) {
 		String sql= "INSERT INTO WaitingList (Patient_Id, Hospital_Id, Speciality_Id) VALUES ('" + patId + "', '"+ hospId	+ "', '" + spId	+ "'); ";
 
 		try {
+			Statement stmt= getConnection().createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		};
+	}
+
+
+
+	@Override
+	public ArrayList<Symptom> getSymptoms() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public void showHospitals(String sp) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public String compareSymptoms(ArrayList<Integer> nums) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 	
