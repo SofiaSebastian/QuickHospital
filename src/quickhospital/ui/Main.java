@@ -101,6 +101,12 @@ public class Main {
 	
 					case 3:
 						break;
+					case 4: 
+						manager.disconnect();
+						//salir del jpa
+						System.out.println("BYE, THANKS FOR USING QUICKHOSPITAL!!");
+						System.exit(0);
+						break;
 					}
 				} while (option != 0);
 				break;
@@ -123,7 +129,14 @@ public class Main {
 	                    break;
 	                case 5:
 	                    deleteSpeciality();
-	                    break;                           
+	                    break;  
+	                case 6:
+	                	manager.disconnect();
+						//salir del jpa
+						System.out.println("BYE, THANKS FOR USING QUICKHOSPITAL!!");
+						System.exit(0);
+						break;
+	                	
 	            }
 				}while (option != 0);
 			}
@@ -386,8 +399,9 @@ public class Main {
 		do {
 			System.out.println("1.Insert symptoms");
 			System.out.println("2.Abandom Waiting List");//deberiamos subir la posicion de todos en la waiting list
-			System.out.println("3.Log out");
-		}while(opcion > 3 || opcion < 0);
+			System.out.println("3.View appointment");
+			System.out.println("4.Log out");
+		}while(opcion > 4 || opcion < 0);
 		//get the report of the waiting list
 		return opcion;
 	}
@@ -430,10 +444,11 @@ public class Main {
             System.out.println("3. Add new Speciality");
             System.out.println("4. Add existing Speciality to a Hospital");
             System.out.println("5. Delete Speciality");
+            System.out.println("6. Log out");
 
             opcion = Utils.leerEntero("Introduce an option (0 to exit): ");
             
-        }while(opcion > 5 || opcion < 1);
+        }while(opcion > 6 || opcion < 1);
     
         return opcion;    
     }
