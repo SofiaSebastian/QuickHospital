@@ -70,8 +70,6 @@ public class Patient {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-	
 	
 
 }

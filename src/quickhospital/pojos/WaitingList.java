@@ -56,7 +56,7 @@ public class WaitingList {
 		this.date=date;
 		this.hosp_Id=hosp_id;
 		this.sp_Id=sp_id;
-		this.time= new ArrayList<>();
+		this.time= new ArrayList<>(); //poner time.get(0) = 8:00
 		this.patients= new ArrayList<>();
 	}
 
@@ -64,7 +64,7 @@ public class WaitingList {
 	public WaitingList(LocalDate date,ArrayList<LocalTime> time, ArrayList<Patient> patients, Integer hosp_Id, Integer sp_Id) {
 		super();
 		this.date=date;
-		this.time = time;
+		this.time = time; 
 		this.patients = patients;
 		this.hosp_Id = hosp_Id;
 		this.sp_Id = sp_Id;
@@ -93,10 +93,6 @@ public class WaitingList {
 
 	public void setPatients(ArrayList<Patient> patients) {
 		this.patients = patients;
-	}
-
+	} 
 	
-	
-	
-
 }

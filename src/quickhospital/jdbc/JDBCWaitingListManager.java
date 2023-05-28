@@ -15,7 +15,8 @@ private JDBCManager manager;
 	public JDBCWaitingListManager(JDBCManager manager) {
 		this.manager = manager;
 	}
-	private ArrayList<WaitingList> readWaitingLists(){
+	
+	public ArrayList<WaitingList> readWaitingLists(){
 		String sql= "SELECT * FROM WaitingLists";
 		ArrayList<WaitingList> waitinglists= new ArrayList<>();
 		WaitingList w;

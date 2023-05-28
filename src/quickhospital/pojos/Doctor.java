@@ -48,6 +48,18 @@ public class Doctor {
 
 	}
 	
+	public Integer getSpeciality_id() {
+		return speciality_id;
+	}
+	public void setSpeciality_id(Integer speciality_id) {
+		this.speciality_id = speciality_id;
+	}
+	public Integer getHosp_id() {
+		return hosp_id;
+	}
+	public void setHosp_id(Integer hosp_id) {
+		this.hosp_id = hosp_id;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
