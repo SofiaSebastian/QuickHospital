@@ -100,6 +100,10 @@ public class Hospital {
         }
         return -1;
     }
+	
+	public void addSpeciality(Speciality sp) {
+		this.specialities.add(sp);
+	}
 
 	@Override
 	public String toString() {

@@ -50,14 +50,27 @@ public class Patient {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public ArrayList<Symptom> getSymptoms() {
 		return symptoms;
 	}
+	
 	public void setSymptoms(ArrayList<Symptom> symptoms) {
 		this.symptoms = symptoms;
 	}
 	
 	
+	public Integer getSpeciality_id() {
+		return speciality_id;
+	}
+	public void setSpeciality_id(Integer speciality_id) {
+		this.speciality_id = speciality_id;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	
 	
 
