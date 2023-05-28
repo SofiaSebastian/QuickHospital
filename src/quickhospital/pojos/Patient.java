@@ -38,6 +38,26 @@ public class Patient {
 		this.speciality_id = speciality_id;
 		this.symptoms=new ArrayList<>();
 	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public ArrayList<Symptom> getSymptoms() {
+		return symptoms;
+	}
+	public void setSymptoms(ArrayList<Symptom> symptoms) {
+		this.symptoms = symptoms;
+	}
+	
+	
 	
 	
 

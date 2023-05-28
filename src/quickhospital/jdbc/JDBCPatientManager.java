@@ -31,5 +31,17 @@ public class JDBCPatientManager {
 		}
 		return patients;
 	}
+	
+	public void addPatient (String name) {
+		String sql= "INSERT INTO Patients (Name) VALUES (?)";
+		try {
+			PreparedStatement p = manager.getConnection().prepareStatement(sql);
+			p.setString(1, name);
+			p.executeUpdate();
+			
+		}catch(SQLException e ) {
+			e.printStackTrace();
+		}
+	}
 
 }

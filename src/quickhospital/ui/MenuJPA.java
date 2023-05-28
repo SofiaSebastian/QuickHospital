@@ -50,15 +50,12 @@ public class MenuJPA {
 		try{
 				//register doctor
 				Role role = um.getRole("doctor");
-				
 				//pedir atributos de doctor (setters)
 				String name= Utils.leerCadena("Introduce your name");
 				madrid.showHospitals();
 				int hospitalid = Utils.leerEntero("Introduce the number of hospital you work in");
 				madrid.showSpecialities(hospitalid);
 				int specialityid = Utils.leerEntero("Introduce the number of your speciality");
-				
-				
 				//USER
 				String mail = Utils.leerCadena("Introduce email");
 				String password = Utils.leerCadena("introduce password:");
@@ -70,7 +67,7 @@ public class MenuJPA {
 				um.newUser(u); //aqui se sube a la db
 				dm.newDoctor(name,hospitalid,specialityid);
 				int id= dm.getId(name);
-				Doctor doc = new Doctor(id,name);
+				Doctor doc = new Doctor(id,name,hospitalid, specialityid);
 				//madrid.registerDoctor(name,hospitalid,specialityid, id);
 				um.disconnect();
 		    }catch (NoSuchAlgorithmException ex) {
@@ -83,7 +80,7 @@ public class MenuJPA {
 				//register patient
 				Role role = um.getRole("patient");
 				Patient patient = new Patient();
-				//pedir atributos de doctor (setters)
+				//pedir atributos de patient (setters)
 				Integer id= Utils.leerEntero("Introduce ID (only numbers)"); 
 				String mail = Utils.leerCadena("Introduce email");
 				String password = Utils.leerCadena("introduce password:");
@@ -93,7 +90,7 @@ public class MenuJPA {
 				User u = new User(id,mail, digest,role);
 				role.addUSer(u);
 				um.newUser(u); //aqui se sube a la db
-				//pm.addPatient(patient
+				//pm.addPatient(patient)
 				um.disconnect(); 
 				
 			}catch (NoSuchAlgorithmException ex) {
@@ -116,6 +113,8 @@ public class MenuJPA {
 	    
 		
 	
-	
+	public void login () {
+		
+	}
 
 
