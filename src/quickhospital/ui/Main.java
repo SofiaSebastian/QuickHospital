@@ -401,7 +401,10 @@ public class Main {
             System.out.println(ex);
         }
 	}
+	
+	
 	//PATIENT
+	
 	public static Patient idToPatient(int id){
 		for (int i = 0; i < patients.size(); i++){
 			if (patients.get(i).getId() == id){
@@ -411,7 +414,9 @@ public class Main {
 		return null;
 	}
 	
+	
 	//DATES
+	
 	public static LocalDate stringToDate(String d) {
 		LocalDate date=LocalDate.parse(d,DateTimeFormatter.ofPattern("yyyy-MM-d"));
 		return date;
@@ -421,6 +426,7 @@ public class Main {
 		LocalTime time= LocalTime.parse(t, DateTimeFormatter.ofPattern("H:mm:ss.SSSSSS"));
 		return time;
 	}
+	
 	
 	//MENUS
 	
@@ -457,7 +463,6 @@ public class Main {
 		
 		do {
 			System.out.println("1.View waitingList(List of patients of the day:"); 
-			//View Patient Symptoms??
 			System.out.println("2.Log out");
 			opcion = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
 		}while(opcion > 2 || opcion < 0);
