@@ -88,8 +88,7 @@ public class Main {
 						showSymptoms();
 
 						do {
-							numeros = Utils.leerEntero(
-									"Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'):");
+							numeros = Utils.leerEntero("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'):");
 							if (numeros < 0 || numeros > symptoms.size()) {
 								symp_id.add(numeros);
 							} else {
@@ -164,10 +163,8 @@ public class Main {
 		for (int i = 0; i < waitingLists.size(); i++) {
 			if ((waitingLists.get(i).getHosp_Id() == h_id) && (waitingLists.get(i).getSp_Id() == sp_id)) {
 				waitingLists.get(i).addPatient(p);
-				waitingLists.get(i).addTime(
-						waitingLists.get(i).getTime().get(waitingLists.get(i).getTime().size() - 1).plusMinutes(30));
-				System.out.println("Your appointment is at: "
-						+ waitingLists.get(i).getTime().get(waitingLists.get(i).getTime().size() - 1));
+				waitingLists.get(i).addTime(waitingLists.get(i).getTime().get(waitingLists.get(i).getTime().size() - 1).plusMinutes(30));
+				System.out.println("Your appointment is at: " + waitingLists.get(i).getTime().get(waitingLists.get(i).getTime().size() - 1));
 			}
 		}
 	}
@@ -200,8 +197,7 @@ public class Main {
 
 	public static WaitingList waitingListForDoctor(Doctor d) {
 		for (int i = 0; i < waitingLists.size(); i++) {
-			if ((waitingLists.get(i).getHosp_Id() == d.getHosp_id())
-					&& (waitingLists.get(i).getSp_Id() == d.getSpeciality_id())) {
+			if ((waitingLists.get(i).getHosp_Id() == d.getHosp_id()) && (waitingLists.get(i).getSp_Id() == d.getSpeciality_id())) {
 				return waitingLists.get(i);
 			}
 		}
@@ -210,8 +206,7 @@ public class Main {
 
 	public static void showWaitingList(WaitingList w) {
 		for (int i = 0; i < w.getPatients().size(); i++) {
-			System.out.println(w.getPatients().get(i).getId() + ". " + w.getPatients().get(i).getName() + ": "
-					+ w.getTime().get(i));
+			System.out.println(w.getPatients().get(i).getId() + ". " + w.getPatients().get(i).getName() + ": " + w.getTime().get(i));
 		}
 	}
 
@@ -260,8 +255,7 @@ public class Main {
 
 	public static void showSpecialitiesFromAHospital(int id) {
 		for (int i = 0; i < hospitals.get(id - 1).getSpecialities().size(); i++) {
-			System.out.println(hospitals.get(id - 1).getSpecialities().get(i).getId() + " "
-					+ hospitals.get(id - 1).getSpecialities().get(i).getName());
+			System.out.println(hospitals.get(id - 1).getSpecialities().get(i).getId() + " " + hospitals.get(id - 1).getSpecialities().get(i).getName());
 		}
 	}
 
@@ -360,7 +354,7 @@ public class Main {
 	// FUNCIONES DEL ADMINISTRADOR
 
 	public static void addHospital() {
-		Integer id = hospitals.size() + 1;// yo quitaria la clase city y haria hospitals.size()+1
+		Integer id = hospitals.size() + 1;
 		String name = Utils.leerCadena("Insert hospital's name: ");
 		Integer capacity = Utils.leerEntero("\"Insert hospital's capacity: ");
 		String location = Utils.leerCadena("Insert hospital's location: ");
@@ -465,7 +459,7 @@ public class Main {
 
 		do {
 			System.out.println("1.Insert symptoms");
-			System.out.println("2.Abandon Waiting List"); // deberiamos subir la posicion de todos en la waiting list
+			System.out.println("2.Abandon Waiting List"); 
 			System.out.println("3.Log out");
 		} while (opcion > 3 || opcion < 0);
 
@@ -546,8 +540,7 @@ public class Main {
 						Speciality sp;
 						showSymptoms();
 						do {
-							numeros = Utils.leerEntero(
-									"Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'):");
+							numeros = Utils.leerEntero("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'):");
 							if (numeros < 0 || numeros > symptoms.size()) {
 								symp_id.add(numeros);
 							} else {
