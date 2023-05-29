@@ -18,7 +18,6 @@ public class Main {
 	private static ArrayList<Symptom> symptoms;
 	private static ArrayList<Speciality> specialities;
 	private static ArrayList<Hospital> hospitals;
-	// private static City Madrid;
 	private static ArrayList<Doctor> doctors;
 	private static ArrayList<Patient> patients;
 	private static ArrayList<WaitingList> waitingLists;
@@ -51,68 +50,98 @@ public class Main {
 			switch (option) {
 			case 1: // Doctor
 				do {
-					option = doctorMenu();
+					option = patientLogInMenu();
 					switch (option) {
-					// WaitingList w = waitingListForDoctor(d); //necesito al doctor
 					case 1:
-						// showWaitingList(w);
+						Doctor d = doctorLogIn();
+						if (d != null) {
+							do {
+								option = doctorMenu();
+								switch (option) {
+								// WaitingList w = waitingListForDoctor(d); //necesito al doctor
+								case 1:
+									// showWaitingList(w);
+									break;
+								case 2:
+									// showWaitingList(w);
+									int id = Utils.leerEntero("Select the id of the patient whose symptoms you want to see: ");
+									Patient pat = idToPatient(id);
+									showPatientSymptoms(pat);
+									break;
+								case 3:
+									// Log out
+									manager.disconnect();
+									// salir del jpa
+									System.out.println("BYE, THANKS FOR USING QUICKHOSPITAL!!");
+									System.exit(0);
+									break;
+								}
+
+							} while (option!=0);
+						}else {
+							System.out.println("USERNAME/PASSWORD INCORRECT OR USER NOT REGISTERED");
+						}
 						break;
 					case 2:
-						// showWaitingList(w);
-						int id = Utils.leerEntero("Select the id of the patient whose symptoms you want to see: ");
-						Patient pat = idToPatient(id);
-						showPatientSymptoms(pat);
-						break;
-					case 3:
-						// Log out
-						manager.disconnect();
-						// salir del jpa
-						System.out.println("BYE, THANKS FOR USING QUICKHOSPITAL!!");
-						System.exit(0);
+						doctorRegister(manager);
 						break;
 					}
-
-				} while (option < 1 || option > 2);
+				} while (option!=0);
 				break;
 
 			case 2: // Patient
 				do {
-					option = patientMenu();
+					option = patientLogInMenu();
 					switch (option) {
 					case 1:
-						int numeros;
-						ArrayList<Integer> symp_id = new ArrayList<>();
-						ArrayList<Symptom> symptomsPatient;
-						Speciality sp;
+						Patient p = patientLogIn();
+						if (p != null) {
+							do {
+								option = patientMenu();
+								switch (option) {
+								case 1:
+									int numeros;
+									ArrayList<Integer> symp_id = new ArrayList<>();
+									ArrayList<Symptom> symptomsPatient;
+									Speciality sp;
 
-						showSymptoms();
+									showSymptoms();
 
-						do {
-							numeros = Utils.leerEntero("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'):");
-							if (numeros < 0 || numeros > symptoms.size()) {
-								symp_id.add(numeros);
-							} else {
-								System.out.println("Number not in the list");
-							}
-						} while (numeros != 0);
+									do {
+										numeros = Utils.leerEntero("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'):");
+										if (numeros < 0 || numeros > symptoms.size()) {
+											symp_id.add(numeros);
+										} else {
+											System.out.println("Number not in the list");
+										}
+									} while (numeros != 0);
 
-						symptomsPatient = idToSymptoms(symp_id);
-						// p.setSymptoms(symptomsPatient;) //necesito al paciente
-						sp = compareSymptoms(symptomsPatient);
-						showHospitalsWithSelectedSpeciality(sp);
-						int id = Utils.leerEntero("Select the id of the hospital you wish to attend: ");
-						// appointment(id, sp.getId(), p); //necesito al paciente
+									symptomsPatient = idToSymptoms(symp_id);
+									// p.setSymptoms(symptomsPatient;) //necesito al paciente
+									sp = compareSymptoms(symptomsPatient);
+									showHospitalsWithSelectedSpeciality(sp);
+									int id = Utils.leerEntero("Select the id of the hospital you wish to attend: ");
+									// appointment(id, sp.getId(), p); //necesito al paciente
+									break;
+								case 2:
+									// abbandonWaitingList(p); //necesito al paciente
+									break;
+								case 3:
+									manager.disconnect();
+									// salir del jpa
+									System.out.println("BYE, THANKS FOR USING QUICKHOSPITAL!!");
+									System.exit(0);
+									break;
+								}
+							} while (option != 0);
+						}else {
+							System.out.println("USERNAME/PASSWORD INCORRECT OR USER NOT REGISTERED");
+						}
 						break;
 					case 2:
-						// abbandonWaitingList(p); //necesito al paciente
+						patientRegister(manager);
 						break;
-					case 3:
-						manager.disconnect();
-						// salir del jpa
-						System.out.println("BYE, THANKS FOR USING QUICKHOSPITAL!!");
-						System.exit(0);
-						break;
-					}
+					}					
 				} while (option != 0);
 				break;
 
@@ -152,7 +181,7 @@ public class Main {
 
 	}
 
-	public static void registerDoctor(Doctor doctor, int id, int id2) { // esto sobra no???
+	public static void registerDoctor(Doctor doctor, int id, int id2) { 
 		int pos = hospitals.get(id - 1).specialityIdtoPosition(id2);
 		hospitals.get(id - 1).getSpecialities().get(pos).getDoctors().add(doctor);
 	}
@@ -210,6 +239,7 @@ public class Main {
 		}
 	}
 
+	
 	// FUNCIONES DE HOSPITALS
 
 	public static void showHospitals() {
@@ -245,6 +275,7 @@ public class Main {
 		}
 	}
 
+	
 	// FUNCIONES DE SPECIALITIES
 
 	public static void showSpecialities() {
@@ -277,6 +308,7 @@ public class Main {
 		}
 	}
 
+	
 	// FUNCIONES DE SYMPTOMS
 
 	public static void showPatientSymptoms(Patient p) {
@@ -351,6 +383,7 @@ public class Main {
 		return null;
 	}
 
+	
 	// FUNCIONES DEL ADMINISTRADOR
 
 	public static void addHospital() {
@@ -415,7 +448,47 @@ public class Main {
 		}
 	}
 
-	// PATIENT
+	
+	// FUNCIONES DE PATIENT
+	
+	public static Patient patientLogIn(JDBCManager manager) {
+		JPAUserManager um = new JPAUserManager();
+		JDBCPatientManager pm = new JDBCPatientManager(manager);
+		String mail = Utils.leerCadena("Introduce your email");
+		String password = Utils.leerCadena("Introduce password");
+		User u = um.checkPassword(mail, password);
+		Patient p = null;
+		if(u != null) {
+			p = pm.idToPatient(u.getId());//FUNCION ID TO PATIENT
+		}
+		return p;
+	}
+	
+	public static void patientRegister(JDBCManager manager) {
+		try {
+			JPAUserManager um = new JPAUserManager();
+			JDBCPatientManager pm = new JDBCPatientManager(manager);
+			Role role = um.getRole("patient");
+			Patient patient = new Patient();
+			String name = Utils.leerCadena("Introduce your name: ");
+			patient.setName(name);
+			String email = Utils.leerCadena("Introduce email: ");
+			String password = Utils.leerCadena("introduce password:");
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(password.getBytes());
+			byte[] digest = md.digest();
+			pm.addPatient(patient.getName());
+			int id = pm.getId(name);
+			User u = new User(id, email, digest, role);
+			role.addUSer(u);
+			u.setRole(role);
+			um.newUser(u); // aqui se sube a la db
+			pm.addPatient(patient.getName());
+			um.disconnect();
+		} catch (NoSuchAlgorithmException ex) {
+			System.out.println(ex.getMessage());
+		}
+	}
 
 	public static Patient idToPatient(int id) {
 		for (int i = 0; i < patients.size(); i++) {
@@ -425,6 +498,54 @@ public class Main {
 		}
 		return null;
 	}
+	
+	
+	// FUNCIONES DE DOCTOR
+	
+	public static Doctor doctorLogIn(JDBCManager manager) {
+		JPAUserManager um = new JPAUserManager();
+		JDBCDoctorManager dm = new JDBCDoctorManager(manager);
+		String mail = Utils.leerCadena("Introduce your email");
+		String password = Utils.leerCadena("Introduce password");
+		User u = um.checkPassword(mail, password);
+		Doctor d = null;
+		if(u != null) {
+			d = dm.idToDoctor(u.getId());//FUNCION ID TO DOCTOR
+		}
+		return d;
+	}
+	
+	public static void doctorRegister(JDBCManager manager) {
+		JPAUserManager um = new JPAUserManager();
+		JDBCDoctorManager dm = new JDBCDoctorManager(manager);
+		try {
+			// register doctor
+			Role role = um.getRole("doctor");
+			// pedir atributos de doctor (setters)
+			String name = Utils.leerCadena("Introduce your name");
+			showHospitals();
+			int hospitalid = Utils.leerEntero("Introduce the number of hospital you work in");
+			showSpecialitiesFromAHospital(hospitalid);
+			int specialityid = Utils.leerEntero("Introduce the number of your speciality");
+			// USER
+			String mail = Utils.leerCadena("Introduce email");
+			String password = Utils.leerCadena("introduce password:");
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(password.getBytes());
+			byte[] digest = md.digest();
+			User u = new User(mail, digest, role);
+			role.addUSer(u);
+			um.newUser(u);
+			dm.newDoctor(name, hospitalid, specialityid);
+			int id = dm.getId(name);
+			Doctor doc = new Doctor(id, name);
+			registerDoctor(doc, hospitalid, specialityid);
+			um.disconnect();
+		} catch (NoSuchAlgorithmException ex) {
+			System.out.println(ex.getMessage());
+		}
+	}
+	
 
 	// DATES
 
@@ -439,46 +560,59 @@ public class Main {
 		return time;
 	}
 
+	
 	// MENUS
 
 	public static int firstMenu() {
 
-		int opcion = 0;
+		int option = 0;
 
 		do {
 			System.out.println("1.Log in as a administrator:");
 			System.out.println("2.Log in as a patient:");
 			System.out.println("2.Log in as a doctor:");
-		} while (opcion > 3 || opcion < 0);
+		} while (option > 3 || option < 0);
 
-		return opcion;
+		return option;
 	}
 
 	public static int patientMenu() {
-		int opcion = 0;
+		int option = 0;
 
 		do {
 			System.out.println("1.Insert symptoms");
 			System.out.println("2.Abandon Waiting List"); 
 			System.out.println("3.Log out");
-		} while (opcion > 3 || opcion < 0);
+		} while (option > 3 || option < 0);
 
 		// get the report of the waiting list
-		return opcion;
+		return option;
+	}
+	
+	public static int patientLogInMenu() {
+		int option = 0;
+		
+		do {
+			System.out.println("1. Log in");
+			System.out.println("2. Register new account");
+			System.out.println("3. Exit");
+		} while (option > 3 || option < 0);
+
+		return option;
 	}
 
 	public static int doctorMenu() {
 
-		int opcion = 0;
+		int option = 0;
 
 		do {
 			System.out.println("1.View waitingList(List of patients of the day:");
 			System.out.println("1.View patient symptoms:");
 			System.out.println("3.Log out");
-			opcion = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
-		} while (opcion > 3 || opcion < 0);
+			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
+		} while (option > 3 || option < 0);
 
-		return opcion;
+		return option;
 	}
 
 	public static int doctorMenu2() { // esto sobra
@@ -487,7 +621,7 @@ public class Main {
 			System.out.println("You can view patient symptoms");
 			System.out.println("1. Search patient by name:");
 			System.out.println("2. Search patient by id:");
-			System.out.println("3. Return");
+			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
 		} while (option < 1 || option > 3);
 
 		return option;
@@ -496,7 +630,7 @@ public class Main {
 
 	public static int administratorMenu() {
 
-		int opcion = 0;
+		int option = 0;
 
 		do {
 			System.out.println("");
@@ -508,16 +642,17 @@ public class Main {
 			System.out.println("5. Delete Speciality");
 			System.out.println("6. Log out");
 
-			opcion = Utils.leerEntero("Introduce an option (0 to exit): ");
+			option = Utils.leerEntero("Introduce an option (0 to exit): ");
 
-		} while (opcion > 6 || opcion < 1);
+		} while (option > 6 || option < 1);
 
-		return opcion;
+		return option;
 	}
 
+	
 	// LOG IN
 
-	public void patientLogIn(JDBCManager manager) {
+	/*public void patientLogIn2(JDBCManager manager) {
 
 		System.out.println("1. Log in");
 		System.out.println("2. Register new account");
@@ -625,9 +760,9 @@ public class Main {
 				Role role = um.getRole("doctor");
 				// pedir atributos de doctor (setters)
 				String name = Utils.leerCadena("Introduce your name");
-				madrid.showHospitals();
+				showHospitals();
 				int hospitalid = Utils.leerEntero("Introduce the number of hospital you work in");
-				madrid.showSpecialities(hospitalid);
+				showSpecialitiesFromAHospital(hospitalid);
 				int specialityid = Utils.leerEntero("Introduce the number of your speciality");
 				// USER
 				String mail = Utils.leerCadena("Introduce email");
@@ -641,7 +776,7 @@ public class Main {
 				dm.newDoctor(name, hospitalid, specialityid);
 				int id = dm.getId(name);
 				Doctor doc = new Doctor(id, name);
-				madrid.registerDoctor(doc, hospitalid, specialityid);
+				registerDoctor(doc, hospitalid, specialityid);
 				um.disconnect();
 			} catch (NoSuchAlgorithmException ex) {
 				System.out.println(ex.getMessage());
@@ -649,6 +784,6 @@ public class Main {
 			break;
 		}
 		}
-	}
+	}*/
 
 }

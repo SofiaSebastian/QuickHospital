@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import quickhospital.pojos.City;
 import quickhospital.pojos.Doctor;
 import quickhospital.pojos.Hospital;
 

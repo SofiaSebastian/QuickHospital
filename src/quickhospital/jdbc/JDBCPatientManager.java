@@ -43,5 +43,22 @@ public class JDBCPatientManager {
 			e.printStackTrace();
 		}
 	}
+	
+	public int getId(String name) {
+		String sql= "SELECT Id FROM Patients WHERE Name = ?";
+		PreparedStatement s;
+		int id=0;
+		try {
+			s= manager.getConnection().prepareStatement(sql);
+			s.setString(1, name);
+			ResultSet rs= s.executeQuery();
+			id=rs.getInt("Id");
+			rs.close();
+			s.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
 
 }
