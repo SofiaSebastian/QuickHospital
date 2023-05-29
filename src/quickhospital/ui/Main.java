@@ -338,7 +338,7 @@ public class Main {
 
 	}
 
-	public static Speciality compareSymptoms(ArrayList<Symptom> symptoms) { // llenar el getSymptoms de la specialidad
+	public static Speciality compareSymptoms(ArrayList<Symptom> symptoms) { 
 
 		int tam = symptoms.size();
 		int[] cont = new int[tam];
@@ -479,11 +479,11 @@ public class Main {
 			byte[] digest = md.digest();
 			pm.addPatient(patient.getName());
 			int id = pm.getId(name);
+			patients.add(patient);
 			User u = new User(id, email, digest, role);
 			role.addUSer(u);
 			u.setRole(role);
 			um.newUser(u); // aqui se sube a la db
-			pm.addPatient(patient.getName());
 			um.disconnect();
 		} catch (NoSuchAlgorithmException ex) {
 			System.out.println(ex.getMessage());
@@ -539,6 +539,7 @@ public class Main {
 			dm.newDoctor(name, hospitalid, specialityid);
 			int id = dm.getId(name);
 			Doctor doc = new Doctor(id, name);
+			doctors.add(doc);
 			registerDoctor(doc, hospitalid, specialityid);
 			um.disconnect();
 		} catch (NoSuchAlgorithmException ex) {
