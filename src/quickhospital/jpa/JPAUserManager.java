@@ -34,6 +34,7 @@ public class JPAUserManager implements UserManager {
 		if( this.getRoles().isEmpty()) {
 			Role patient = new Role("patient");
 			Role doctor = new Role("doctor");
+			Role admin= new Role("administrator");
 			this.newRole(patient);
 			this.newRole(doctor);
 		}

@@ -525,7 +525,7 @@ public class Main {
 		JDBCDoctorManager dm = new JDBCDoctorManager(manager);
 		try {
 			// register doctor
-			Role role = um.getRole("doctor");//La funcion getRole devuelve null
+			Role role= new Role("doctor");
 			// pedir atributos de doctor (setters)
 			String name = Utils.leerCadena("Introduce your name");
 			showHospitals();
