@@ -60,7 +60,7 @@ private JDBCManager manager;
 		
 	}
 	
-	//crear funcion que me devuelva la waiting list de una especialidad, hospital y dia / o sacarlo de java
+	//crear funcion que me devuelva la waiting list de una especialidad, hospital y dia / sacarlo de java
 	
 	
 	public void addToWaitingList(LocalDate date,LocalTime time,Integer hospId, Integer spId, Integer patId ) {//meter date y time

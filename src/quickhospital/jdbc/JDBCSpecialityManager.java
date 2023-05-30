@@ -68,5 +68,21 @@ public class JDBCSpecialityManager {
 		}
 		return id;
 	}
+	
+	public void addSpeciality(Speciality sp) {
+		String sql= "INSERT INTO Specialities(Name) VALUES(?);";
+		String name= sp.getName();
+		PreparedStatement s; 
+		try {
+			s=manager.getConnection().prepareStatement(sql);
+			s.setString(1, name);
+			s.execute();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 
 }

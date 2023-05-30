@@ -2,6 +2,7 @@ package quickhospital.jpa;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.Persistence;
@@ -70,7 +71,7 @@ public class JPAUserManager implements UserManager {
 	@Override
 	public List<Role> getRoles() {
 		// TODO Auto-generated method stub
-		Query q = em.createNativeQuery("SELECT * FROM roles", Role.class);
+		Query q = em.createNativeQuery("SELECT * FROM Roles", Role.class);
 		List<Role> roles = (List<Role>) q.getResultList();
 		
 		return roles;
@@ -81,7 +82,7 @@ public class JPAUserManager implements UserManager {
 		// TODO Auto-generated method stub
 		User u = null;
 		
-		Query q = em.createNativeQuery("Select * from users where email =? AND password = ?", User.class);
+		Query q = em.createNativeQuery("Select * from Users where Email =? AND Password = ?", User.class);
 		q.setParameter(1, email);
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
@@ -98,6 +99,31 @@ public class JPAUserManager implements UserManager {
 		}catch(NoResultException e) {}
 		
 		return u;
+	}
+	
+	public Integer getIdfromDB (String email, String passw, Role role) {
+		
+		Query q = em.createNativeQuery("Select Id from Users where Email =? AND Password = ? AND Role =?", User.class);
+		q.setParameter(1, email);
+		q.setParameter(3, role);
+		int id= 0;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(passw.getBytes());
+			byte[] digest = md.digest();
+			q.setParameter(2,digest);
+			
+		}catch(NoSuchAlgorithmException e){
+			e.printStackTrace();
+		}
+		try {
+			
+			 id= q.getFirstResult();
+			
+		}catch (NoResultException e ) {
+			e.printStackTrace();
+		}
+		return id;
 	}
 
 }

@@ -26,25 +26,25 @@ public class Main {
 		JDBCManager manager = new JDBCManager();
 		JDBCSymptomsManager sym = new JDBCSymptomsManager(manager);
 		JDBCSpecialityManager spe = new JDBCSpecialityManager(manager);
-		JDBCHospitalManager h = new JDBCHospitalManager(manager);
-		JDBCPatientManager p = new JDBCPatientManager(manager);
-		JDBCDoctorManager d = new JDBCDoctorManager(manager);
-		JDBCWaitingListManager w = new JDBCWaitingListManager(manager);
+		JDBCHospitalManager hm = new JDBCHospitalManager(manager);
+		JDBCPatientManager pm = new JDBCPatientManager(manager);
+		JDBCDoctorManager dm = new JDBCDoctorManager(manager);
+		JDBCWaitingListManager wm = new JDBCWaitingListManager(manager);
+		JPAUserManager um= new JPAUserManager();
 		specialities = spe.readSpecialities();
-		hospitals = h.readHospitalDB();
+		hospitals = hm.readHospitalDB();
 		symptoms = sym.readSymptoms();
-		h.readHospSpec();
+		hm.readHospSpec();
 		spe.readSpecSymp();
-		patients = p.readPatients();
-		doctors = d.readDoctors();
-		waitingLists = w.readWaitingLists();
+		patients = pm.readPatients();
+		doctors = dm.readDoctors();
+		waitingLists = wm.readWaitingLists();
 
 		// manager.executeSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/dml_Hospitals.sql");
 
 		int option;
 		String read;
 		do {
-			firstMenu();
 			option = firstMenu();
 
 			switch (option) {
@@ -53,17 +53,18 @@ public class Main {
 					option = patientLogInMenu();
 					switch (option) {
 					case 1:
-						Doctor d = doctorLogIn();
+						Doctor d = doctorLogIn(manager);
+						WaitingList w = waitingListForDoctor(d);
 						if (d != null) {
 							do {
 								option = doctorMenu();
 								switch (option) {
-								// WaitingList w = waitingListForDoctor(d); //necesito al doctor
+									//WaitingList w = waitingListForDoctor(d); //necesito al doctor
 								case 1:
-									// showWaitingList(w);
+									 showWaitingList(w);
 									break;
 								case 2:
-									// showWaitingList(w);
+									showWaitingList(w);
 									int id = Utils.leerEntero("Select the id of the patient whose symptoms you want to see: ");
 									Patient pat = idToPatient(id);
 									showPatientSymptoms(pat);
@@ -71,6 +72,7 @@ public class Main {
 								case 3:
 									// Log out
 									manager.disconnect();
+									um.disconnect();
 									// salir del jpa
 									System.out.println("BYE, THANKS FOR USING QUICKHOSPITAL!!");
 									System.exit(0);
@@ -94,7 +96,7 @@ public class Main {
 					option = patientLogInMenu();
 					switch (option) {
 					case 1:
-						Patient p = patientLogIn();
+						Patient p = patientLogIn(manager);
 						if (p != null) {
 							do {
 								option = patientMenu();
@@ -117,17 +119,18 @@ public class Main {
 									} while (numeros != 0);
 
 									symptomsPatient = idToSymptoms(symp_id);
-									// p.setSymptoms(symptomsPatient;) //necesito al paciente
+									p.setSymptoms(symptomsPatient); 
 									sp = compareSymptoms(symptomsPatient);
 									showHospitalsWithSelectedSpeciality(sp);
 									int id = Utils.leerEntero("Select the id of the hospital you wish to attend: ");
-									// appointment(id, sp.getId(), p); //necesito al paciente
+									appointment(id, sp.getId(), p);
 									break;
 								case 2:
-									// abbandonWaitingList(p); //necesito al paciente
+									abbandonWaitingList(p);
 									break;
 								case 3:
 									manager.disconnect();
+									um.disconnect();
 									// salir del jpa
 									System.out.println("BYE, THANKS FOR USING QUICKHOSPITAL!!");
 									System.exit(0);
@@ -150,19 +153,19 @@ public class Main {
 					option = administratorMenu();
 					switch (option) {
 					case 1:
-						addHospital();
+						addHospital(hm);
 						break;
 					case 2:
-						deleteHospital();
+						deleteHospital(hm);
 						break;
 					case 3:
-						addNewSpeciality();
+						addNewSpeciality(spe);
 						break;
 					case 4:
-						addExistingSpecialityToHospital();
+						addExistingSpecialityToHospital(hm);
 						break;
 					case 5:
-						deleteSpeciality();
+						deleteSpeciality(hm);
 						break;
 					case 6:
 						manager.disconnect();
@@ -175,9 +178,7 @@ public class Main {
 				} while (option != 0);
 			}
 		} while (option != 0);
-		// HACER LOG IN CON JPA
-
-		// UNA VEZ HECHO EL LOG IN
+		
 
 	}
 
@@ -376,7 +377,7 @@ public class Main {
 
 	public static Symptom idtoSymptom(int id) {
 		for (int i = 0; i < symptoms.size(); i++) {
-			if (specialities.get(i).getId() == id) {
+			if (symptoms.get(i).getId() == id) {
 				return symptoms.get(i);
 			}
 		}
@@ -386,36 +387,37 @@ public class Main {
 	
 	// FUNCIONES DEL ADMINISTRADOR
 
-	public static void addHospital() {
+	public static void addHospital(JDBCHospitalManager hm) {
 		Integer id = hospitals.size() + 1;
 		String name = Utils.leerCadena("Insert hospital's name: ");
 		Integer capacity = Utils.leerEntero("\"Insert hospital's capacity: ");
 		String location = Utils.leerCadena("Insert hospital's location: ");
 		Hospital h = new Hospital(id, name, capacity, location);
 		hospitals.add(h);
-		// añadir tambien a la base de datos
+		hm.addHospital(h);
 	}
 
-	public static void deleteHospital() {
+	public static void deleteHospital(JDBCHospitalManager hm ) {
 		try {
 			showHospitals();
 			int aux = Utils.leerEntero("Choose the hospital you want to delete: ");
-			hospitals.remove(aux - 1);
+			hospitals.set(aux-1, null);
+			//hospitals.remove(aux - 1);
+			hm.deleteHospital(aux);
 		} catch (IndexOutOfBoundsException ex) {
 			System.out.println(ex);
 		}
-		// quitarlo tambien de la base de datos
 	}
 
-	public static void addNewSpeciality() {
+	public static void addNewSpeciality(JDBCSpecialityManager sm) {
 		String name = Utils.leerCadena("Insert speciality's name: ");
 		int id = specialities.size() + 1;
 		Speciality sp = new Speciality(id, name);
 		specialities.add(sp);
-		// añadir tambien a la base de datos
+		sm.addSpeciality(sp);
 	}
 
-	public static void addExistingSpecialityToHospital() {
+	public static void addExistingSpecialityToHospital(JDBCHospitalManager hm) {
 		try {
 			showHospitals();
 			int aux = Utils.leerEntero("Choose the hospital you want to add the speciality: ");
@@ -423,6 +425,7 @@ public class Main {
 				int id = Utils.leerEntero("Insert speciality's id: ");
 				Speciality sp = idToSpeciality(id);
 				hospitals.get(aux - 1).getSpecialities().add(sp);
+				hm.addSpecialityToHospital(aux, id);
 			} else {
 				System.out.println("This hospital doesn't exist!");
 			}
@@ -431,7 +434,7 @@ public class Main {
 		}
 	}
 
-	public static void deleteSpeciality() {
+	public static void deleteSpeciality(JDBCHospitalManager hm) {
 		try {
 			showHospitals();
 			int aux = Utils.leerEntero("Choose the hospital you want to delete the speciality: ");
@@ -439,7 +442,9 @@ public class Main {
 				showSpecialitiesFromAHospital(aux);
 				int aux2 = Utils.leerEntero("Choose the speciality you want to delete: ");
 				int pos = hospitals.get(aux - 1).specialityIdtoPosition(aux2);
-				hospitals.get(aux - 1).getSpecialities().remove(pos);
+				hospitals.get(aux-1).getSpecialities().set(pos, null);
+				//hospitals.get(aux - 1).getSpecialities().remove(pos);
+				hm.deleteSpeciality(aux, aux2);
 			} else {
 				System.out.println("This hospital doesn't exist!");
 			}
@@ -459,7 +464,7 @@ public class Main {
 		User u = um.checkPassword(mail, password);
 		Patient p = null;
 		if(u != null) {
-			p = pm.idToPatient(u.getId());//FUNCION ID TO PATIENT
+			p = idToPatient(u.getId());//FUNCION ID TO PATIENT ---> vale asi o hago pm.idToPatient(u.getId())
 		}
 		return p;
 	}
@@ -510,7 +515,7 @@ public class Main {
 		User u = um.checkPassword(mail, password);
 		Doctor d = null;
 		if(u != null) {
-			d = dm.idToDoctor(u.getId());//FUNCION ID TO DOCTOR
+			d = idToDoctor(u.getId());//FUNCION ID TO DOCTOR ****** asi o la busco en la db
 		}
 		return d;
 	}
@@ -520,7 +525,7 @@ public class Main {
 		JDBCDoctorManager dm = new JDBCDoctorManager(manager);
 		try {
 			// register doctor
-			Role role = um.getRole("doctor");
+			Role role = um.getRole("doctor");//La funcion getRole devuelve null
 			// pedir atributos de doctor (setters)
 			String name = Utils.leerCadena("Introduce your name");
 			showHospitals();
@@ -547,6 +552,15 @@ public class Main {
 		}
 	}
 	
+	public static Doctor idToDoctor(int id) {
+		for (int i = 0; i < doctors.size(); i++) {
+			if (doctors.get(i).getId() == id) {
+				return doctors.get(i);
+			}
+		}
+		return null;
+	}
+	
 
 	// DATES
 
@@ -569,9 +583,9 @@ public class Main {
 		int option = 0;
 
 		do {
-			System.out.println("1.Log in as a administrator:");
-			System.out.println("2.Log in as a patient:");
-			System.out.println("2.Log in as a doctor:");
+			System.out.println("1.I am an administrator:");
+			System.out.println("2.I am a patient:");
+			System.out.println("3.I am a doctor:");
 		} while (option > 3 || option < 0);
 
 		return option;
@@ -640,7 +654,7 @@ public class Main {
 			System.out.println("2. Delete Hospital");
 			System.out.println("3. Add new Speciality");
 			System.out.println("4. Add existing Speciality to a Hospital");
-			System.out.println("5. Delete Speciality");
+			System.out.println("5. Delete Speciality from an Hospital");
 			System.out.println("6. Log out");
 
 			option = Utils.leerEntero("Introduce an option (0 to exit): ");

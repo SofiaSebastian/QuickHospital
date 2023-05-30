@@ -78,4 +78,58 @@ public class JDBCHospitalManager {
 		}
 		return id;
 	}
+	public void addHospital(Hospital h) { //Comprobado que funciona
+		String name= h.getName();
+		int capacity = h.getCapacity();
+		String location= h.getLocation();
+		String sql= "INSERT INTO Hospitals(Name, Location, Capacity) VALUES (?,?,?);";
+		PreparedStatement s; 
+		try {
+			s= manager.getConnection().prepareStatement(sql);
+			s.setString(1, name);
+			s.setString(2, location);
+			s.setInt(3, capacity);
+			s.execute();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteHospital(int i) { //comprobado que funciona
+		String sql= "DELETE FROM Hospitals WHERE id= ?;";
+		PreparedStatement s; 
+		try {
+			s=manager.getConnection().prepareStatement(sql);
+			s.setInt(1, i);
+			s.execute();
+		}catch(SQLException e ) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addSpecialityToHospital(int h, int sp) {
+		String sql= "INSERT INTO Hospitals_Specialities(Hospital_Id, Speciality_Id) VALUES (?,?);";
+		PreparedStatement s; 
+		try {
+			s=manager.getConnection().prepareStatement(sql);
+			s.setInt(1, h);
+			s.setInt(1, sp);
+			s.execute();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteSpeciality(int h, int sp) {
+		String sql= "DELETE FROM Hospitals_Specialities WHERE Hospital_Id= ? AND Speciality_Id = ?;";
+		PreparedStatement s; 
+		try {
+			s=manager.getConnection().prepareStatement(sql);
+			s.setInt(1, h);
+			s.setInt(2, sp);
+			s.execute();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
