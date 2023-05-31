@@ -40,10 +40,8 @@ public class Main {
 		doctors = dm.readDoctors();
 		waitingLists = wm.readWaitingLists();
 
-		// manager.executeSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/dml_Hospitals.sql");
-
 		int option;
-		String read;
+
 		do {
 			option = firstMenu();
 
