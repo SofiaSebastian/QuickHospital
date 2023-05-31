@@ -14,7 +14,7 @@ public class JDBCSpecialityManager {
 
 	public ArrayList<Speciality> readSpecialities() {// read table Specialities from db
 
-		String sql = "SELECT * FROM Specialities";
+		String sql = "SELECT * FROM Specialities;";
 		ArrayList<Speciality> specialities = new ArrayList<>();
 
 		try {
@@ -26,6 +26,8 @@ public class JDBCSpecialityManager {
 				Speciality sp = new Speciality(id, name);
 				specialities.add(sp);
 			}
+			rs.close();
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -33,7 +35,7 @@ public class JDBCSpecialityManager {
 	}
 	
 	public void readSpecSymp() {//read table Specialities_Symptoms
-		String sql= "SELECT * FROM Specialities_Symptoms";
+		String sql= "SELECT * FROM Specialities_Symptoms;";
 		ArrayList<Integer> symId= new ArrayList<>();
 		ArrayList <Integer> spsID= new ArrayList<>();
 	
@@ -47,13 +49,15 @@ public class JDBCSpecialityManager {
 				Symptom s= Main.idtoSymptom(syId);
 				Main.addSymptom(s, sp);
 			}
+			rs.close();
+			stmt.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public int getId(String name) {
-		String sql = "SELECT Id FROM Specialities WHERE Name = ?";
+		String sql = "SELECT Id FROM Specialities WHERE Name = ?;";
 		PreparedStatement s;
 		int id = 0;
 		try {
@@ -76,7 +80,8 @@ public class JDBCSpecialityManager {
 		try {
 			s=manager.getConnection().prepareStatement(sql);
 			s.setString(1, name);
-			s.execute();
+			s.executeUpdate();
+			s.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}

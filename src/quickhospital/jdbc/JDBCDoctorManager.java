@@ -18,7 +18,7 @@ public class JDBCDoctorManager {
 	}
 	
 	public ArrayList<Doctor> readDoctors() { //read table Doctor from db
-		String sql= "SELECT * FROM Doctors";
+		String sql= "SELECT * FROM Doctors;";
 		ArrayList <Doctor> doctors= new ArrayList<>();
 		try {
 			Statement stmt= manager.getConnection().createStatement();
@@ -32,6 +32,8 @@ public class JDBCDoctorManager {
 				Doctor d = new Doctor(id, name, spid, hospid, email);
 				doctors.add(d);
 			}
+			rs.close();
+			stmt.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -47,7 +49,7 @@ public class JDBCDoctorManager {
 			p.setInt(3, specialityid);
 			p.setString(4, email);
 			p.executeUpdate();
-			
+			p.close();
 		}catch(SQLException e ) {
 			e.printStackTrace();
 		}

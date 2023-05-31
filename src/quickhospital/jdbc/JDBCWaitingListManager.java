@@ -17,7 +17,7 @@ private JDBCManager manager;
 	}
 	
 	public ArrayList<WaitingList> readWaitingLists(){
-		String sql= "SELECT * FROM WaitingLists";
+		String sql= "SELECT * FROM WaitingLists;";
 		ArrayList<WaitingList> waitinglists= new ArrayList<>();
 		WaitingList w;
 		try {
@@ -53,6 +53,8 @@ private JDBCManager manager;
 					}
 				}
 			}
+			rs.close();
+			stmt.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -60,15 +62,15 @@ private JDBCManager manager;
 		
 	}
 	
-	//crear funcion que me devuelva la waiting list de una especialidad, hospital y dia / sacarlo de java
 	
 	
-	public void addToWaitingList(LocalDate date,LocalTime time,Integer hospId, Integer spId, Integer patId ) {//meter date y time
-		String sql= "INSERT INTO WaitingList (Date, Time, Patient_Id, Hospital_Id, Speciality_Id) VALUES ('" + patId + "', '"+ hospId	+ "', '" + spId	+ "'); ";
+	public void addToWaitingList(LocalDate date,LocalTime time,Integer hospId, Integer spId, Integer patId ) {
+		String sql= "INSERT INTO WaitingList (Date, Time, Patient_Id, Hospital_Id, Speciality_Id) VALUES ('" + date + "','" + time + "','" + patId + "', '"+ hospId	+ "', '" + spId	+ "'); ";
 
 		try {
 			Statement stmt= manager.getConnection().createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
+			stmt.executeUpdate(sql);
+			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -17,7 +17,7 @@ public class JDBCSymptomsManager {
 	}
 
 	public ArrayList<Symptom> readSymptoms() { // read table Symptoms from db
-		String sql = "SELECT * FROM Symptoms";
+		String sql = "SELECT * FROM Symptoms;";
 		ArrayList<Symptom> symptoms = new ArrayList<>();
 
 		try {
@@ -29,6 +29,8 @@ public class JDBCSymptomsManager {
 				Symptom s = new Symptom(id, name);
 				symptoms.add(s);
 			}
+			rs.close();
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -36,7 +38,7 @@ public class JDBCSymptomsManager {
 	}
 
 	public int getId(String name) {
-		String sql = "SELECT Id FROM Symptoms WHERE Name = ?";
+		String sql = "SELECT Id FROM Symptoms WHERE Name = ?;";
 		PreparedStatement s;
 		int id = 0;
 		try {

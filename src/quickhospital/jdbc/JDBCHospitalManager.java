@@ -20,7 +20,7 @@ public class JDBCHospitalManager {
 	}
 
 	public ArrayList<Hospital> readHospitalDB() {// read table Hospitals from db
-		String sql = "SELECT * FROM Hospitals";
+		String sql = "SELECT * FROM Hospitals;";
 		ArrayList<Hospital> hospitals = new ArrayList<>();
 		try {
 			
@@ -34,6 +34,8 @@ public class JDBCHospitalManager {
 				Hospital h = new Hospital(id, name, capacity, location);
 				hospitals.add(h);
 			}
+			rs.close();
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -41,7 +43,7 @@ public class JDBCHospitalManager {
 	}
 	
 	public void readHospSpec() {//read table Hospitals_Specialities
-		String sql= "SELECT * FROM Hospitals_Specialities";
+		String sql= "SELECT * FROM Hospitals_Specialities;";
 		ArrayList<Integer> hospID= new ArrayList<>();
 		ArrayList <Integer> spsID= new ArrayList<>();
 	
@@ -55,6 +57,8 @@ public class JDBCHospitalManager {
 				Hospital h = Main.idToHospital(hId);
 				Main.addSpeciality(sp, h);
 			}
+			rs.close();
+			stmt.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -63,7 +67,7 @@ public class JDBCHospitalManager {
 	
 	
 	public int getId(String name) {//get the id of a Hospital from its name
-		String sql = "SELECT Id FROM Hospitals WHERE Name = ?";
+		String sql = "SELECT Id FROM Hospitals WHERE Name = ?;";
 		PreparedStatement s;
 		int id = 0;
 		try {
@@ -89,7 +93,8 @@ public class JDBCHospitalManager {
 			s.setString(1, name);
 			s.setString(2, location);
 			s.setInt(3, capacity);
-			s.execute();
+			s.executeUpdate();
+			s.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -101,7 +106,8 @@ public class JDBCHospitalManager {
 		try {
 			s=manager.getConnection().prepareStatement(sql);
 			s.setInt(1, i);
-			s.execute();
+			s.executeUpdate();
+			s.close();
 		}catch(SQLException e ) {
 			e.printStackTrace();
 		}
@@ -114,7 +120,8 @@ public class JDBCHospitalManager {
 			s=manager.getConnection().prepareStatement(sql);
 			s.setInt(1, h);
 			s.setInt(1, sp);
-			s.execute();
+			s.executeUpdate();
+			s.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -127,7 +134,8 @@ public class JDBCHospitalManager {
 			s=manager.getConnection().prepareStatement(sql);
 			s.setInt(1, h);
 			s.setInt(2, sp);
-			s.execute();
+			s.executeUpdate();
+			s.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}

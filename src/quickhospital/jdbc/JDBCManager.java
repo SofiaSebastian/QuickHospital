@@ -28,8 +28,6 @@ public class JDBCManager implements DBManager{
 		}
 	}
 	
-	
-	
 	public Connection getConnection() {
 		return c;
 	}
@@ -277,17 +275,6 @@ public class JDBCManager implements DBManager{
 		};
 	}*/
 	
-	public void addToWaitingList(Integer hospId, Integer spId, Integer patId ) {
-		String sql= "INSERT INTO WaitingList (Patient_Id, Hospital_Id, Speciality_Id) VALUES ('" + patId + "', '"+ hospId	+ "', '" + spId	+ "'); ";
-
-		try {
-			Statement stmt= getConnection().createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		};
-	}
 
 
 

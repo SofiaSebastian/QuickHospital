@@ -15,7 +15,7 @@ public class JDBCPatientManager {
 	}
 
 	public ArrayList<Patient> readPatients() {// read table Patients from db
-		String sql = "SELECT * FROM Patients";
+		String sql = "SELECT * FROM Patients;";
 
 		try {
 			Statement stmt = manager.getConnection().createStatement();
@@ -27,6 +27,8 @@ public class JDBCPatientManager {
 				Patient p = new Patient(id, name, email);
 				patients.add(p);
 			}
+			rs.close();
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -34,19 +36,19 @@ public class JDBCPatientManager {
 	}
 	
 	public void addPatient (String name) {
-		String sql= "INSERT INTO Patients (Name) VALUES (?)";
+		String sql= "INSERT INTO Patients (Name) VALUES (?);";
 		try {
 			PreparedStatement p = manager.getConnection().prepareStatement(sql);
 			p.setString(1, name);
 			p.executeUpdate();
-			
+			p.close();
 		}catch(SQLException e ) {
 			e.printStackTrace();
 		}
 	}
 	
 	public int getId(String name) {
-		String sql= "SELECT Id FROM Patients WHERE Name = ?";
+		String sql= "SELECT Id FROM Patients WHERE Name = ?;";
 		PreparedStatement s;
 		int id=0;
 		try {
