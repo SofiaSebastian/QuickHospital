@@ -12,7 +12,7 @@ public interface UserManager {
 	public void newUser(User u);
 	public void newRole(Role r);
 	
-	public Role getRole(String email);
+	public Role getRole(Integer id);
 	
 	public List<Role> getRoles();
 	

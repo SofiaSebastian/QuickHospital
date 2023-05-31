@@ -3,7 +3,9 @@ package quickhospital.pojos;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Objects;
+
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,12 +39,14 @@ public class Role implements Serializable{
 	
 	public Role() {
 		super();
+		this.users= new ArrayList<User>();
 	}
 	
 	
 	
 	public Role( String name) {
 		super();
+		this.users= new ArrayList<User>();
 		this.name = name;
 	}
 

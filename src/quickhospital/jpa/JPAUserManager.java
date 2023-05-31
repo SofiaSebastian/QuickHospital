@@ -32,11 +32,15 @@ public class JPAUserManager implements UserManager {
 		em.getTransaction().commit();
 		
 		if( this.getRoles().isEmpty()) {
-			Role patient = new Role("patient");
-			Role doctor = new Role("doctor");
+			Role patient = new Role("doctor");
+			Role doctor = new Role("patient");
 			Role admin= new Role("administrator");
-			this.newRole(patient);
+			doctor.setId(1);
 			this.newRole(doctor);
+			patient.setId(2);
+			this.newRole(patient);
+			admin.setId(3);
+			this.newRole(admin);
 		}
 		
 	}
@@ -64,9 +68,11 @@ public class JPAUserManager implements UserManager {
 	}
 
 	@Override
-	public Role getRole(String email) {
-		// TODO Auto-generated method stub
-		return null;
+	public Role getRole(Integer id) {
+			Query q = em.createNativeQuery("SELECT * FROM roles where id="+id, Role.class);
+			Role r = (Role) q.getSingleResult();
+		
+		return r;
 	}
 
 	@Override

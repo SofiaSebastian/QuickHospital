@@ -40,10 +40,8 @@ public class Main {
 		doctors = dm.readDoctors();
 		waitingLists = wm.readWaitingLists();
 
-		// manager.executeSQLfile("/Users/jaimedemiguel/git/QuickHospital/src/quickhospital/db/dml_Hospitals.sql");
-
 		int option;
-		String read;
+
 		do {
 			option = firstMenu();
 
@@ -150,6 +148,7 @@ public class Main {
 
 			case 3:// Administrator
 				do {
+					
 					option = administratorMenu();
 					switch (option) {
 					case 1:
@@ -245,7 +244,7 @@ public class Main {
 
 	public static void showHospitals() {
 		for (int i = 0; i < hospitals.size(); i++) {
-			System.out.println((i + 1) + " " + hospitals.get(i));
+			System.out.println(hospitals.get(i));
 		}
 	}
 
@@ -473,7 +472,7 @@ public class Main {
 		try {
 			JPAUserManager um = new JPAUserManager();
 			JDBCPatientManager pm = new JDBCPatientManager(manager);
-			Role role = um.getRole("patient");
+			Role role = um.getRole(1);
 			Patient patient = new Patient();
 			String name = Utils.leerCadena("Introduce your name: ");
 			patient.setName(name);
@@ -487,7 +486,7 @@ public class Main {
 			patients.add(patient);
 			User u = new User(id, email, digest, role);
 			role.addUSer(u);
-			u.setRole(role);
+			//u.setRole(role);
 			um.newUser(u); // aqui se sube a la db
 			um.disconnect();
 		} catch (NoSuchAlgorithmException ex) {
@@ -525,7 +524,7 @@ public class Main {
 		JDBCDoctorManager dm = new JDBCDoctorManager(manager);
 		try {
 			// register doctor
-			Role role= new Role("doctor");
+			Role role= um.getRole(null);
 			// pedir atributos de doctor (setters)
 			String name = Utils.leerCadena("Introduce your name");
 			showHospitals();
@@ -583,9 +582,10 @@ public class Main {
 		int option = 0;
 
 		do {
-			System.out.println("1.I am an administrator:");
-			System.out.println("2.I am a patient:");
-			System.out.println("3.I am a doctor:");
+			System.out.println("1.I am a patient:");
+			System.out.println("2.I am a doctor :");
+			System.out.println("3.I am an administrator :");
+			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
 		} while (option > 3 || option < 0);
 
 		return option;
@@ -598,6 +598,7 @@ public class Main {
 			System.out.println("1.Insert symptoms");
 			System.out.println("2.Abandon Waiting List"); 
 			System.out.println("3.Log out");
+			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
 		} while (option > 3 || option < 0);
 
 		// get the report of the waiting list
@@ -611,6 +612,7 @@ public class Main {
 			System.out.println("1. Log in");
 			System.out.println("2. Register new account");
 			System.out.println("3. Exit");
+			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
 		} while (option > 3 || option < 0);
 
 		return option;
