@@ -6,7 +6,7 @@ import quickhospital.pojos.Doctor;
 
 public interface DBDoctorManager {
 	ArrayList<Doctor> readDoctors();
-	void newDoctor(String name, int hospitalid, int specialityid);
+	void newDoctor(String name, int hospitalid, int specialityid, String email);
 	int getId(String name);
 	
 }

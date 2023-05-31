@@ -463,7 +463,8 @@ public class Main {
 		User u = um.checkPassword(mail, password);
 		Patient p = null;
 		if(u != null) {
-			p = idToPatient(u.getId());//FUNCION ID TO PATIENT ---> vale asi o hago pm.idToPatient(u.getId())
+			int id= pm.emailToId(mail);
+			p = idToPatient(id);//FUNCION ID TO PATIENT ---> vale asi o hago pm.idToPatient(u.getId())
 		}
 		return p;
 	}
@@ -472,22 +473,21 @@ public class Main {
 		try {
 			JPAUserManager um = new JPAUserManager();
 			JDBCPatientManager pm = new JDBCPatientManager(manager);
-			Role role = um.getRole(1);
-			Patient patient = new Patient();
+			Role role = um.getRole(2);
 			String name = Utils.leerCadena("Introduce your name: ");
-			patient.setName(name);
 			String email = Utils.leerCadena("Introduce email: ");
 			String password = Utils.leerCadena("introduce password:");
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(password.getBytes());
 			byte[] digest = md.digest();
-			pm.addPatient(patient.getName());
-			int id = pm.getId(name);
+			User u = new User(email, digest, role);
+			um.newUser(u);
+			int id = pm.emailToId(email);
+			Patient patient = new Patient(id, name, email);
 			patients.add(patient);
-			User u = new User(id, email, digest, role);
-			role.addUSer(u);
+			//role.addUSer(u);
 			//u.setRole(role);
-			um.newUser(u); // aqui se sube a la db
+			 // aqui se sube a la db
 			um.disconnect();
 		} catch (NoSuchAlgorithmException ex) {
 			System.out.println(ex.getMessage());
@@ -514,7 +514,8 @@ public class Main {
 		User u = um.checkPassword(mail, password);
 		Doctor d = null;
 		if(u != null) {
-			d = idToDoctor(u.getId());//FUNCION ID TO DOCTOR ****** asi o la busco en la db
+			int id=dm.emailToId(mail);
+			d = idToDoctor(id);//FUNCION ID TO DOCTOR ****** asi o la busco en la db
 		}
 		return d;
 	}
@@ -524,7 +525,7 @@ public class Main {
 		JDBCDoctorManager dm = new JDBCDoctorManager(manager);
 		try {
 			// register doctor
-			Role role= um.getRole(null);
+			Role role= um.getRole(1);
 			// pedir atributos de doctor (setters)
 			String name = Utils.leerCadena("Introduce your name");
 			showHospitals();
@@ -538,11 +539,11 @@ public class Main {
 			md.update(password.getBytes());
 			byte[] digest = md.digest();
 			User u = new User(mail, digest, role);
-			role.addUSer(u);
+			//role.addUSer(u);
 			um.newUser(u);
-			dm.newDoctor(name, hospitalid, specialityid);
-			int id = dm.getId(name);
-			Doctor doc = new Doctor(id, name);
+			dm.newDoctor(name, hospitalid, specialityid, mail);
+			int id= dm.emailToId(mail);
+			Doctor doc = new Doctor(id, name, hospitalid, specialityid, mail);
 			doctors.add(doc);
 			registerDoctor(doc, hospitalid, specialityid);
 			um.disconnect();
@@ -582,8 +583,8 @@ public class Main {
 		int option = 0;
 
 		do {
-			System.out.println("1.I am a patient:");
-			System.out.println("2.I am a doctor :");
+			System.out.println("1.I am a doctor:");
+			System.out.println("2.I am a patient:");
 			System.out.println("3.I am an administrator :");
 			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
 		} while (option > 3 || option < 0);

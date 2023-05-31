@@ -291,26 +291,6 @@ public class JDBCManager implements DBManager{
 
 
 
-	@Override
-	public ArrayList<Symptom> getSymptoms() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-
-
-	@Override
-	public void showHospitals(String sp) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public String compareSymptoms(ArrayList<Integer> nums) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
 	

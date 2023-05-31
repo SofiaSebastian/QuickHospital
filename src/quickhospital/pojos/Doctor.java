@@ -12,25 +12,32 @@ public class Doctor {
 	private String name;
 	private Integer speciality_id;
 	private Integer hosp_id;
-	
+	private String email;
 
 	
 	//Constructors
 	public Doctor() {
 		super();
 	}
-	public Doctor(Integer id, String name, Integer sp, Integer hosp) {
+	public Doctor(Integer id, String name, Integer sp, Integer hosp, String email) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.hosp_id = hosp;
 		this.speciality_id = sp;
+		this.email = email;
 	}
 		
 	public Doctor(Integer id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
+	}
+	
+	public Doctor(String name, String email) {
+		super();
+		this.name = name;
+		this.email = email;
 	}
 	//Getters and Setters
 	

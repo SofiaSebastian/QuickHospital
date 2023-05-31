@@ -17,10 +17,12 @@ import javax.persistence.TableGenerator;
 @Table (name = "users")
 public class User implements Serializable {
 	
+	private static final long serialVersionUID = 6259095372259484182L;
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8236513013305065850L;
+
+	
 	
 	@Id
 	@GeneratedValue( generator = "users")

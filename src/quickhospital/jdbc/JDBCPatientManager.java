@@ -23,7 +23,8 @@ public class JDBCPatientManager {
 			while (rs.next()) {
 				int id = rs.getInt("Id");
 				String name = rs.getString("Name");
-				Patient p = new Patient(id, name);
+				String email= rs.getString("email");
+				Patient p = new Patient(id, name, email);
 				patients.add(p);
 			}
 		} catch (SQLException e) {
@@ -51,6 +52,23 @@ public class JDBCPatientManager {
 		try {
 			s= manager.getConnection().prepareStatement(sql);
 			s.setString(1, name);
+			ResultSet rs= s.executeQuery();
+			id=rs.getInt("Id");
+			rs.close();
+			s.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
+	public Integer emailToId(String email) {
+		String sql="SELECT Id FROM Patients WHERE email=?;";
+				PreparedStatement s;
+		int id=0;
+		try {
+			s= manager.getConnection().prepareStatement(sql);
+			s.setString(1, email);
 			ResultSet rs= s.executeQuery();
 			id=rs.getInt("Id");
 			rs.close();

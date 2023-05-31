@@ -28,7 +28,8 @@ public class JDBCDoctorManager {
 				String name= rs.getString("Name");
 				int spid= rs.getInt("Speciality_id");
 				int hospid= rs.getInt("Hospital_id");
-				Doctor d = new Doctor(id, name, spid, hospid);
+				String email= rs.getString("email");
+				Doctor d = new Doctor(id, name, spid, hospid, email);
 				doctors.add(d);
 			}
 		}catch(SQLException e) {
@@ -37,13 +38,14 @@ public class JDBCDoctorManager {
 		return doctors;
 	}
 	
-	public void newDoctor (String name, int hospitalid, int specialityid) {
-		String sql= "INSERT INTO Doctors (Name, Hospital_Id, Speciality_Id) VALUES (?,?,?)";
+	public void newDoctor (String name, int hospitalid, int specialityid, String email) {
+		String sql= "INSERT INTO Doctors (Name, Hospital_Id, Speciality_Id, email) VALUES (?,?,?,?);";
 		try {
 			PreparedStatement p = manager.getConnection().prepareStatement(sql);
 			p.setString(1, name);
 			p.setInt(2, hospitalid);
 			p.setInt(3, specialityid);
+			p.setString(4, email);
 			p.executeUpdate();
 			
 		}catch(SQLException e ) {
@@ -53,12 +55,28 @@ public class JDBCDoctorManager {
 	
 	
 	public int getId(String name) {
-		String sql= "SELECT Id FROM Doctors WHERE Name = ?";
+		String sql= "SELECT Id FROM Doctors WHERE Name = ?;";
 		PreparedStatement s;
 		int id=0;
 		try {
 			s= manager.getConnection().prepareStatement(sql);
 			s.setString(1, name);
+			ResultSet rs= s.executeQuery();
+			id=rs.getInt("Id");
+			rs.close();
+			s.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	public Integer emailToId(String email) {
+		String sql="SELECT Id FROM Doctors WHERE email=?;";
+				PreparedStatement s;
+		int id=0;
+		try {
+			s= manager.getConnection().prepareStatement(sql);
+			s.setString(1, email);
 			ResultSet rs= s.executeQuery();
 			id=rs.getInt("Id");
 			rs.close();

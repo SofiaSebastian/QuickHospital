@@ -20,10 +20,12 @@ import javax.persistence.TableGenerator;
 public class Role implements Serializable{
 
 	
+	private static final long serialVersionUID = 7254010412114428251L;
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3234067083846134737L;
+	
+	
 	
 	@Id
 	@GeneratedValue(generator = "roles")
