@@ -1,4 +1,4 @@
-package quickhospital.db;
+package quickhospital.ifaces;
 
 public interface DBHospitalManager {
 int getId(String name);

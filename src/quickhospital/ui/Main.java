@@ -39,6 +39,7 @@ public class Main {
 		patients = pm.readPatients();
 		doctors = dm.readDoctors();
 		waitingLists = wm.readWaitingLists();
+		
 
 		int option;
 
@@ -59,13 +60,21 @@ public class Main {
 								switch (option) {
 									//WaitingList w = waitingListForDoctor(d); //necesito al doctor
 								case 1:
-									 showWaitingList(w);
+									if(w != null) {
+										showWaitingList(w);
+									 }else {
+										 System.out.println("THERE ARE NO PATIENTS IN THE WAITING LIST!!");
+									 }
 									break;
 								case 2:
-									showWaitingList(w);
-									int id = Utils.leerEntero("Select the id of the patient whose symptoms you want to see: ");
-									Patient pat = idToPatient(id);
-									showPatientSymptoms(pat);
+									if(w != null) {
+										showWaitingList(w);
+										int id = Utils.leerEntero("Select the id of the patient whose symptoms you want to see: ");
+										Patient pat = idToPatient(id);
+										showPatientSymptoms(pat);
+									 }else {
+										 System.out.println("THERE ARE NO PATIENTS IN THE WAITING LIST!!");
+									 }
 									break;
 								case 3:
 									// Log out
@@ -109,18 +118,27 @@ public class Main {
 
 									do {
 										numeros = Utils.leerEntero("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'):");
-										if (numeros < 0 || numeros > symptoms.size()) {
+										if (numeros >= 1 && numeros < symptoms.size()) {
 											symp_id.add(numeros);
-										} else {
-											System.out.println("Number not in the list");
+										} else if(numeros != 0){
+											System.out.println("THIS NUMBER IS NOT ON THE LIST");
 										}
 									} while (numeros != 0);
-
 									symptomsPatient = idToSymptoms(symp_id);
 									p.setSymptoms(symptomsPatient); 
 									sp = compareSymptoms(symptomsPatient);
+									System.out.println(sp.getName());
 									showHospitalsWithSelectedSpeciality(sp);
 									int id = Utils.leerEntero("Select the id of the hospital you wish to attend: ");
+									boolean is=false;
+									do {
+										id = Utils.leerEntero("Select the id of the hospital you wish to attend: ");
+										for(int i = 0; i < hospitals.size(); i++) {
+											if(id == hospitals.get(i).getId()) {
+												is=true;
+											}
+										}
+									}while(!is); 
 									appointment(id, sp.getId(), p);
 									break;
 								case 2:
@@ -189,14 +207,29 @@ public class Main {
 	// FUNCIONES WAITING LIST
 
 	public static void appointment(int h_id, int sp_id, Patient p) {
-		for (int i = 0; i < waitingLists.size(); i++) {
-			if ((waitingLists.get(i).getHosp_Id() == h_id) && (waitingLists.get(i).getSp_Id() == sp_id)) {
-				waitingLists.get(i).addPatient(p);
-				waitingLists.get(i).addTime(waitingLists.get(i).getTime().get(waitingLists.get(i).getTime().size() - 1).plusMinutes(30));
-				System.out.println("Your appointment is at: " + waitingLists.get(i).getTime().get(waitingLists.get(i).getTime().size() - 1));
+		WaitingList w = new WaitingList(h_id, sp_id);
+		ArrayList<LocalTime>times= new ArrayList<>();
+		for(int i=0; i<waitingLists.size();i++) {
+			if(w.getDate().equals(waitingLists.get(i).getDate())&& w.getHosp_Id().equals(waitingLists.get(i).getHosp_Id())&& w.getSp_Id().equals(waitingLists.get(i).getSp_Id())) {
+				times.add(waitingLists.get(i).getTime());
+
 			}
 		}
+		if(times.isEmpty()) {
+			w.setPatients(p);
+			String timeString = "08:00:00";
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+	        LocalTime parsedTime = LocalTime.parse(timeString, formatter);
+			w.setTime(parsedTime);
+		}else {
+			w.setPatients(p);
+			w.setTime(times.get(times.size()-1).plusMinutes(30));
+		}
+		
+		System.out.println("Your appointment is at: " + w.getDate() + " " + w.getTime());
+		//meter waitinglist en la base de datos
 	}
+	
 
 	public static void abbandonWaitingList(Patient p) {
 		for (int i = 0; i < waitingLists.size(); i++) {
@@ -340,17 +373,16 @@ public class Main {
 
 	public static Speciality compareSymptoms(ArrayList<Symptom> symptoms) { 
 
-		int tam = symptoms.size();
-		int[] cont = new int[tam];
+		int[] cont = new int[specialities.size()];
 
-		for (int k = 0; k < tam; k++) {
+		for (int k = 0; k < specialities.size(); k++) {
 			cont[k] = 0;
 		}
 
-		for (int i = 0; i < tam; i++) {
-			for (int j = 0; j < specialities.size();) {
+		for (int i = 0; i < symptoms.size(); i++) {
+			for (int j = 0; j < specialities.size(); j++) {
 				if (specialities.get(j).getSymptoms().contains(symptoms.get(i))) {
-					cont[j] += 1;
+					cont[j]++;
 				}
 			}
 		}
@@ -462,11 +494,13 @@ public class Main {
 		String password = Utils.leerCadena("Introduce password");
 		User u = um.checkPassword(mail, password);
 		Patient p = null;
-		if(u != null) {
+		if(u != null && u.getRole().getId() == 2) {
 			int id= pm.emailToId(mail);
 			p = idToPatient(id);//FUNCION ID TO PATIENT ---> vale asi o hago pm.idToPatient(u.getId())
+			return p;
+		}else {
+			return null;
 		}
-		return p;
 	}
 	
 	public static void patientRegister(JDBCManager manager) {
@@ -482,6 +516,7 @@ public class Main {
 			byte[] digest = md.digest();
 			User u = new User(email, digest, role);
 			um.newUser(u);
+			pm.addPatient(name,email);
 			int id = pm.emailToId(email);
 			Patient patient = new Patient(id, name, email);
 			patients.add(patient);
@@ -513,26 +548,39 @@ public class Main {
 		String password = Utils.leerCadena("Introduce password");
 		User u = um.checkPassword(mail, password);
 		Doctor d = null;
-		if(u != null) {
+		if(u != null && u.getRole().getId() == 1) {
 			int id=dm.emailToId(mail);
 			d = idToDoctor(id);//FUNCION ID TO DOCTOR ****** asi o la busco en la db
+			return d;
+		}else {
+			return null;
 		}
-		return d;
 	}
 	
 	public static void doctorRegister(JDBCManager manager) {
 		JPAUserManager um = new JPAUserManager();
 		JDBCDoctorManager dm = new JDBCDoctorManager(manager);
+		int hospitalid;
+		int specialityid;
 		try {
 			// register doctor
 			Role role= um.getRole(1);
 			// pedir atributos de doctor (setters)
 			String name = Utils.leerCadena("Introduce your name");
 			showHospitals();
-			int hospitalid = Utils.leerEntero("Introduce the number of hospital you work in");
+			do {
+				hospitalid = Utils.leerEntero("Introduce the number of hospital you work in");
+			}while(hospitalid < 1 || hospitalid >= hospitals.size());
 			showSpecialitiesFromAHospital(hospitalid);
-			int specialityid = Utils.leerEntero("Introduce the number of your speciality");
-			// USER
+			boolean is =false;
+			do {
+				specialityid = Utils.leerEntero("Introduce the number of your speciality");
+				for(int i = 0; i < hospitals.get(hospitalid-1).getSpecialities().size() && specialityid < specialities.size(); i++ ) {
+					if(specialityid == hospitals.get(hospitalid-1).getSpecialities().get(i).getId()) {
+						is=true;
+					}
+				}
+			}while(!is);
 			String mail = Utils.leerCadena("Introduce email");
 			String password = Utils.leerCadena("introduce password:");
 			MessageDigest md = MessageDigest.getInstance("MD5");
@@ -547,6 +595,9 @@ public class Main {
 			doctors.add(doc);
 			registerDoctor(doc, hospitalid, specialityid);
 			um.disconnect();
+			// USER
+			
+			
 		} catch (NoSuchAlgorithmException ex) {
 			System.out.println(ex.getMessage());
 		}
@@ -625,7 +676,7 @@ public class Main {
 
 		do {
 			System.out.println("1.View waitingList(List of patients of the day:");
-			System.out.println("1.View patient symptoms:");
+			System.out.println("2.View patient symptoms:");
 			System.out.println("3.Log out");
 			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
 		} while (option > 3 || option < 0);
@@ -666,142 +717,5 @@ public class Main {
 
 		return option;
 	}
-
-	
-	// LOG IN
-
-	/*public void patientLogIn2(JDBCManager manager) {
-
-		System.out.println("1. Log in");
-		System.out.println("2. Register new account");
-		int option = Utils.leerEntero("Choose an option:");
-		switch (option) {
-		case 1: {
-			JPAUserManager um = new JPAUserManager();
-			String mail = Utils.leerCadena("Introduce your email");
-			String password = Utils.leerCadena("Introduce password");
-			User u = um.checkPassword(mail, password);
-			if (u != null) {
-
-				do {
-					option = patientMenu();
-					switch (option) {
-					case 1: {
-						int numeros;
-						ArrayList<Integer> symp_id = new ArrayList<>();
-						ArrayList<Symptom> symptomsPatient;
-						Speciality sp;
-						showSymptoms();
-						do {
-							numeros = Utils.leerEntero("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'):");
-							if (numeros < 0 || numeros > symptoms.size()) {
-								symp_id.add(numeros);
-							} else {
-								System.out.println("Number not in the list");
-							}
-						} while (numeros != 0);
-
-						symptomsPatient = idToSymptoms(symp_id);
-						sp = compareSymptoms(symptomsPatient);
-						showHospitalsWithSelectedSpeciality(sp);
-						int id = Utils.leerEntero("Select the id of the hospital you wish to attend: ");
-						// ahora con esto conseguir el waiting list
-
-						break;
-					}
-					case 2: {
-						break;
-					}
-
-					case 3: {
-						um.disconnect();
-						break;
-					}
-					}
-				} while (option < 0 || option > 3);
-			} else {
-				System.out.println("Incorrect password/username or this account does not exist");
-			}
-			break;
-
-		}
-		case 2: {
-			try {
-				JPAUserManager um = new JPAUserManager();
-				JDBCPatientManager pm = new JDBCPatientManager(manager);
-				Role role = um.getRole("patient");
-				Patient patient = new Patient();
-				String name = Utils.leerCadena("Introduce your name: ");
-				patient.setName(name);
-				String email = Utils.leerCadena("Introduce email: ");
-				String password = Utils.leerCadena("introduce password:");
-				MessageDigest md = MessageDigest.getInstance("MD5");
-				md.update(password.getBytes());
-				byte[] digest = md.digest();
-				User u = new User(email, digest, role);
-				role.addUSer(u);
-				u.setRole(role);
-				um.newUser(u); // aqui se sube a la db
-				pm.addPatient(patient.getName());
-				um.disconnect();
-			} catch (NoSuchAlgorithmException ex) {
-				System.out.println(ex.getMessage());
-			}
-			break;
-		}
-		}
-	}
-
-	public void doctorLogIn(JDBCManager manager, City madrid) {
-
-		System.out.println("1. Log in");
-		System.out.println("2. Register new account");
-		int option = Utils.leerEntero("Choose an option:");
-		switch (option) {
-		case 1: {
-			JPAUserManager um = new JPAUserManager();
-			String mail = Utils.leerCadena("Introduce your email");
-			String password = Utils.leerCadena("Introduce password");
-			User u = um.checkPassword(mail, password);
-			if (u != null) {
-				// aqui va el menu del doctor
-			} else {
-				System.out.println("Incorrect password/username or this account does not exist");
-			}
-			break;
-		}
-		case 2: {
-			JPAUserManager um = new JPAUserManager();
-			JDBCDoctorManager dm = new JDBCDoctorManager(manager);
-			try {
-				// register doctor
-				Role role = um.getRole("doctor");
-				// pedir atributos de doctor (setters)
-				String name = Utils.leerCadena("Introduce your name");
-				showHospitals();
-				int hospitalid = Utils.leerEntero("Introduce the number of hospital you work in");
-				showSpecialitiesFromAHospital(hospitalid);
-				int specialityid = Utils.leerEntero("Introduce the number of your speciality");
-				// USER
-				String mail = Utils.leerCadena("Introduce email");
-				String password = Utils.leerCadena("introduce password:");
-				MessageDigest md = MessageDigest.getInstance("MD5");
-				md.update(password.getBytes());
-				byte[] digest = md.digest();
-				User u = new User(mail, digest, role);
-				role.addUSer(u);
-				um.newUser(u);
-				dm.newDoctor(name, hospitalid, specialityid);
-				int id = dm.getId(name);
-				Doctor doc = new Doctor(id, name);
-				registerDoctor(doc, hospitalid, specialityid);
-				um.disconnect();
-			} catch (NoSuchAlgorithmException ex) {
-				System.out.println(ex.getMessage());
-			}
-			break;
-		}
-		}
-	}*/
 
 }

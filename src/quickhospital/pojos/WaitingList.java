@@ -1,5 +1,6 @@
 package quickhospital.pojos;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.sql.*;
 
@@ -8,8 +9,8 @@ public class WaitingList {
 	private static final long serialVersionUID = -980840724257282729L;
 	//Atributes
 	private LocalDate date;
-	private ArrayList<LocalTime> time;
-	private ArrayList<Patient> patients; 
+	private LocalTime time;
+	private Patient patient; 
 	private Integer hosp_Id;
 	private Integer sp_Id;
 	
@@ -42,57 +43,54 @@ public class WaitingList {
 	//Constructors
 	public WaitingList() {
 		super();
-		this.time= new ArrayList<>();
-		this.patients= new ArrayList<>();
+		this.patient = null;
+		this.date = LocalDate.now().plusDays(1);
+		this.time = null;
 	}
 
-	public WaitingList(ArrayList<LocalTime> time, ArrayList<Patient> patients) {
+	public WaitingList(LocalTime time, Patient patient) {
 		super();
 		this.time = time;
-		this.patients = patients;
+		this.patient = patient;
+		this.date = LocalDate.now();
 	}
-	public WaitingList(LocalDate date, Integer hosp_id, Integer sp_id) {
+	
+	public WaitingList(Integer hosp_id, Integer sp_id) {
 		super();
-		this.date=date;
+		this.date = LocalDate.now().plusDays(1);
 		this.hosp_Id=hosp_id;
 		this.sp_Id=sp_id;
-		this.time= new ArrayList<>(); //poner time.get(0) = 8:00
-		this.patients= new ArrayList<>();
+		this.time= null; //poner time.get(0) = 8:00
+		this.patient = null;
 	}
 
 	
-	public WaitingList(LocalDate date,ArrayList<LocalTime> time, ArrayList<Patient> patients, Integer hosp_Id, Integer sp_Id) {
+	public WaitingList(LocalDate date, LocalTime time, Patient patient, Integer hosp_Id, Integer sp_Id) {
 		super();
-		this.date=date;
+		this.date = LocalDate.now().plusDays(1);
 		this.time = time; 
-		this.patients = patients;
+		this.patient = patient;
 		this.hosp_Id = hosp_Id;
 		this.sp_Id = sp_Id;
 	}
-	public void addPatient(Patient p) {
-		this.patients.add(p);
-	}
 	
-	public void addTime(LocalTime t) {
-		this.time.add(t);
-	}
 
 	//Getters and Setters
 
-	public ArrayList<LocalTime> getTime() {
+	public LocalTime getTime() {
 		return this.time;
 	}
 
-	public void setTime(ArrayList<LocalTime> time) {
+	public void setTime(LocalTime time) {
 		this.time = time;
 	}
 
-	public ArrayList<Patient> getPatients() {
-		return this.patients;
+	public Patient getPatients() {
+		return this.patient;
 	}
 
-	public void setPatients(ArrayList<Patient> patients) {
-		this.patients = patients;
+	public void setPatients(Patient patient) {
+		this.patient = patient;
 	} 
 	
 }

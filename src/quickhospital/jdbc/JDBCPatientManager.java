@@ -8,13 +8,14 @@ import quickhospital.pojos.Patient;
 public class JDBCPatientManager {
 
 	private JDBCManager manager;
-	private ArrayList<Patient> patients;
+	
 
 	public JDBCPatientManager(JDBCManager manager) {
 		this.manager = manager;
 	}
 
 	public ArrayList<Patient> readPatients() {// read table Patients from db
+		ArrayList<Patient> patients=new ArrayList<>();
 		String sql = "SELECT * FROM Patients;";
 
 		try {
@@ -25,6 +26,7 @@ public class JDBCPatientManager {
 				String name = rs.getString("Name");
 				String email= rs.getString("email");
 				Patient p = new Patient(id, name, email);
+				
 				patients.add(p);
 			}
 			rs.close();
@@ -35,11 +37,12 @@ public class JDBCPatientManager {
 		return patients;
 	}
 	
-	public void addPatient (String name) {
-		String sql= "INSERT INTO Patients (Name) VALUES (?);";
+	public void addPatient (String name, String email) {
+		String sql= "INSERT INTO Patients (Name, email) VALUES (?,?);";
 		try {
 			PreparedStatement p = manager.getConnection().prepareStatement(sql);
 			p.setString(1, name);
+			p.setString(2, email);
 			p.executeUpdate();
 			p.close();
 		}catch(SQLException e ) {
