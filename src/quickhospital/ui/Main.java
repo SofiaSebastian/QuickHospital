@@ -517,7 +517,6 @@ public class Main {
 		sm.addSpeciality(sp);
 		sp.setId(sm.getId(name));
 		specialities.add(sp);
-		//Añadir sintomas por teclado
 	}
 
 	public static void addExistingSpecialityToHospital(JDBCHospitalManager hm) {
