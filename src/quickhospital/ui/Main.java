@@ -12,6 +12,7 @@ import quickhospital.jdbc.*;
 import quickhospital.jpa.*;
 import quickhospital.pojos.*;
 import quickhospital.utilities.*;
+import quickhospital.XML.*;
 
 public class Main {
 
@@ -39,7 +40,8 @@ public class Main {
 		patients = pm.readPatients();
 		doctors = dm.readDoctors();
 		waitingLists = wm.readWaitingLists();
-		
+	    XML.doctor2xml(doctors);
+	    XML.patient2xml(patients);
 
 		int option;
 

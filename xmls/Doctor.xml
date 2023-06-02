@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Doctor Id="7">
+    <Name>juan antonio</Name>
+    <Speciality_id>3</Speciality_id>
+    <Hospital_id>1</Hospital_id>
+    <Email>juananto@gmail.com</Email>
+</Doctor>

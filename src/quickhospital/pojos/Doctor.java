@@ -1,17 +1,30 @@
 package quickhospital.pojos;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.time.LocalDateTime;
 
- 
+import javax.xml.bind.annotation.*;
 
-public class Doctor {
-	private static final long serialVersionUID = -115684524257282729L;
+
+
+ 
+@XmlRootElement(name = "Doctor")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {"name","speciality_id", "hosp_id", "email"})
+
+public class Doctor implements Serializable {
+	private static final long serialVersionUID = -2346845242345582729L;
 	//Atributes
+	@XmlAttribute(name = "Id")
 	private Integer id;
+	@XmlElement (name = "Name")
 	private String name;
+	@XmlElement (name = "Speciality_id")
 	private Integer speciality_id;
+	@XmlElement (name = "Hospital_id")
 	private Integer hosp_id;
+	@XmlElement (name = "Email")
 	private String email;
 
 	

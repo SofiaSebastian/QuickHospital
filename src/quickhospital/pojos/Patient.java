@@ -2,13 +2,30 @@ package quickhospital.pojos;
 
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlRootElement(name = "Patient")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {"name","speciality_id", "symptoms", "email"})
 public class Patient {
 	private static final long serialVersionUID = -434234724257282729L;
 	//Atributes
+	@XmlAttribute(name = "Id")
 	private Integer id;
+	@XmlElement (name = "Name")
 	private String name;
+	@XmlElement (name = "Speciality_id")
 	private Integer speciality_id;
+	@XmlElement (name = "Symptoms")
+	@XmlElementWrapper (name = "Symptom")
 	private ArrayList<Symptom> symptoms;
+	@XmlElement (name = "Email")
 	private String email;
 	
 	//Empty constructor
