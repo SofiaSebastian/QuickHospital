@@ -53,12 +53,11 @@ public class Main {
 					switch (option) {
 					case 1:
 						Doctor d = doctorLogIn(manager);
-						WaitingList w = waitingListForDoctor(d);
+						ArrayList<WaitingList> w = waitingListForDoctor(d);
 						if (d != null) {
 							do {
 								option = doctorMenu();
 								switch (option) {
-									//WaitingList w = waitingListForDoctor(d); //necesito al doctor
 								case 1:
 									if(w != null) {
 										showWaitingList(w);
@@ -139,7 +138,7 @@ public class Main {
 											}
 										}
 									}while(!is); 
-									appointment(id, sp.getId(), p);
+									appointment(id, sp.getId(), p,wm);
 									break;
 								case 2:
 									abbandonWaitingList(p);
@@ -206,7 +205,7 @@ public class Main {
 
 	// FUNCIONES WAITING LIST
 
-	public static void appointment(int h_id, int sp_id, Patient p) {
+	public static void appointment(int h_id, int sp_id, Patient p, JDBCWaitingListManager wm ) {
 		WaitingList w = new WaitingList(h_id, sp_id);
 		ArrayList<LocalTime>times= new ArrayList<>();
 		for(int i=0; i<waitingLists.size();i++) {
@@ -227,48 +226,43 @@ public class Main {
 		}
 		
 		System.out.println("Your appointment is at: " + w.getDate() + " " + w.getTime());
-		//meter waitinglist en la base de datos
+		wm.addWaitingList(w);
+		
 	}
 	
 
 	public static void abbandonWaitingList(Patient p) {
+		int pos = 0;
 		for (int i = 0; i < waitingLists.size(); i++) {
-			if (waitingLists.get(i).getPatients().contains(p)) {
-				waitingLists.get(i).getPatients().remove(p);
-				int pos = positionInWaitingList(p);
-				waitingLists.get(i).getTime().remove(pos);
-
+			if (waitingLists.get(i).getPatients()==p) {
+				waitingLists.remove(i);
+				pos=i;
 			} else {
 				System.out.println("You were not in a waiting list");
 			}
 		}
-	}
-
-	public static int positionInWaitingList(Patient p) {
-		int pos;
-		for (int i = 0; i < waitingLists.size(); i++) {
-			for (int j = 0; j < waitingLists.get(i).getPatients().size(); j++) {
-				if (waitingLists.get(i).getPatients().get(j) == p) {
-					pos = j;
-					return pos;
-				}
-			}
+		for(int i=pos; i<waitingLists.size(); i++) {
+			LocalTime time= waitingLists.get(i).getTime();
+			waitingLists.get(i).setTime(time.minusMinutes(30));
 		}
-		return -1;
+		
 	}
+	
+	
 
-	public static WaitingList waitingListForDoctor(Doctor d) {
+	public static ArrayList<WaitingList> waitingListForDoctor(Doctor d) {
+		ArrayList<WaitingList> waitings= new ArrayList<>();
 		for (int i = 0; i < waitingLists.size(); i++) {
 			if ((waitingLists.get(i).getHosp_Id() == d.getHosp_id()) && (waitingLists.get(i).getSp_Id() == d.getSpeciality_id())) {
-				return waitingLists.get(i);
+				waitings.add(waitingLists.get(i));
 			}
 		}
-		return null;
+		return waitings;
 	}
 
-	public static void showWaitingList(WaitingList w) {
-		for (int i = 0; i < w.getPatients().size(); i++) {
-			System.out.println(w.getPatients().get(i).getId() + ". " + w.getPatients().get(i).getName() + ": " + w.getTime().get(i));
+	public static void showWaitingList(ArrayList<WaitingList> waitings ) {
+		for (int i = 0; i < waitings.size(); i++) {
+			System.out.println(waitings.get(i));
 		}
 	}
 

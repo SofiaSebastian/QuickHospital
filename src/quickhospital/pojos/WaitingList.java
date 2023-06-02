@@ -52,7 +52,7 @@ public class WaitingList {
 		super();
 		this.time = time;
 		this.patient = patient;
-		this.date = LocalDate.now();
+		this.date = LocalDate.now().plusDays(1);
 	}
 	
 	public WaitingList(Integer hosp_id, Integer sp_id) {
@@ -91,6 +91,13 @@ public class WaitingList {
 
 	public void setPatients(Patient patient) {
 		this.patient = patient;
+	}
+
+	@Override
+	public String toString() {
+		return "WaitingList [date=" + date + ", time=" + time + ", patient=" + patient + ", hosp_Id=" + hosp_Id
+				+ ", sp_Id=" + sp_Id + "]";
 	} 
+	
 	
 }
