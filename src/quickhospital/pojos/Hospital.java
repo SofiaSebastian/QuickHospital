@@ -30,6 +30,14 @@ public class Hospital {
 		this.location = location;
 		this.specialities = new ArrayList<>();
 	}
+	
+	public Hospital(String name, Integer capacity, String location) {
+		super();
+		this.name = name;
+		this.capacity = capacity;
+		this.location = location;
+		this.specialities = new ArrayList<>();
+	}
 
 
 	public Hospital(Integer id, String name, Integer capacity, String location, ArrayList<Speciality> specialities) {
@@ -92,14 +100,6 @@ public class Hospital {
 		this.specialities = specialities;
 	}
 	
-	public int specialityIdtoPosition(int id){
-        for(int i = 0; i < specialities.size(); i++){
-            if(specialities.get(i).getId() == id){
-                return i;
-            }
-        }
-        return -1;
-    }
 	
 	public void addSpeciality(Speciality sp) {
 		this.specialities.add(sp);

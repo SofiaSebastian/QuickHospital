@@ -48,6 +48,14 @@ public class Speciality {
 		this.doctors = new ArrayList<>();
 		this.waitingList = null;
 	}
+	
+	public Speciality(String name) {
+		super();
+		this.name = name;
+		this.symptoms = new ArrayList<>();
+		this.doctors = new ArrayList<>();
+		this.waitingList = null;
+	}
 
 	// Getters and Setters
 	public Integer getId() {

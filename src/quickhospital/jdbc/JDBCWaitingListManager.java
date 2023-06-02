@@ -48,12 +48,20 @@ private JDBCManager manager;
 	
 	public void addWaitingList(WaitingList w) {
 		
-		String sql= "INSERT INTO WaitingList (Date, Time, Patient_Id, Hospital_Id, Speciality_Id) VALUES ('" + w.getDate() + "','" + w.getTime() + "','" + w.getPatients().getId() + "', '"+ w.getHosp_Id()	+ "', '" + w.getSp_Id()	+ "'); ";
+		String sql= "INSERT INTO WaitingLists (Date, Time, Patient_Id, Hospital_Id, Speciality_Id) VALUES (?,?,?,?,?); ";
 
 		try {
-			Statement stmt= manager.getConnection().createStatement();
-			stmt.executeUpdate(sql);
-			stmt.close();
+			PreparedStatement p= manager.getConnection().prepareStatement(sql);
+			String time= w.getTime().toString();
+			p.setString(2,time);
+			String date= w.getDate().toString();
+			p.setString(1, date);
+			p.setInt(3, w.getPatients().getId());
+			p.setInt(4, w.getHosp_Id());
+			p.setInt(5, w.getSp_Id());
+			p.executeUpdate();
+			p.close();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

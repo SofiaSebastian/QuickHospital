@@ -72,6 +72,10 @@ public class Patient {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	@Override
+	public String toString() {
+		return "Patient [id=" + id + ", name=" + name + "]";
+	}
 	
 
 }
