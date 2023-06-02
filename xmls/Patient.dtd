@@ -1,0 +1,10 @@
+   <!ELEMENT Patient (Name, Speciality_id, Symptoms, Email)>
+   <!ATTLIST Doctor Id CDATA #REQUIRED>
+   <!ELEMENT Name (#PCDATA)>
+   <!ELEMENT Speciality_id (#PCDATA)>
+   <!ELEMENT Email (#PCDATA)>
+   <!ELEMENT Symptoms (Symptom+)>
+   <!ELEMENT Symptoms (id,name)>
+   <!ELEMENT id (#PCDATA)>
+   <!ELEMENT name (#PCDATA)>
+

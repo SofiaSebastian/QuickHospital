@@ -1,0 +1,7 @@
+   <!ELEMENT Doctor (Name, Speciality_id, Hospital_id, Email)>
+   <!ATTLIST Doctor Id CDATA #REQUIRED>
+   <!ELEMENT Name (#PCDATA)>
+   <!ELEMENT Speciality_id (#PCDATA)>
+   <!ELEMENT Hospital_id (#PCDATA)>
+   <!ELEMENT Email (#PCDATA)>
+
