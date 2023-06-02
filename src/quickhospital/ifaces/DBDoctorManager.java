@@ -8,5 +8,6 @@ public interface DBDoctorManager {
 	ArrayList<Doctor> readDoctors();
 	void newDoctor(String name, int hospitalid, int specialityid, String email);
 	int getId(String name);
+	Integer emailToId(String email);
 	
 }

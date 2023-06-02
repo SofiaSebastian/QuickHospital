@@ -40,13 +40,6 @@ public class JDBCManager implements DBManager{
 			e.printStackTrace();
 		}
 	}
-	
 
-	public void showSymptoms(ArrayList<Symptom> symp) {
-        for (int i = 0; i < symp.size(); i++) {
-            Symptom s = symp.get(i);
-            System.out.println( s.getId()+". "+s.getName());
-        }
-    }
 }
 	
