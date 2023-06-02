@@ -119,7 +119,7 @@ public class Main {
 									sp = compareSymptoms(symptomsPatient);
 									System.out.println(sp.getName());
 									showHospitalsWithSelectedSpeciality(sp);
-									int id = Utils.leerEntero("Select the id of the hospital you wish to attend: ");
+									int id;
 									boolean is=false;
 									do {
 										id = Utils.leerEntero("Select the id of the hospital you wish to attend: ");
@@ -211,7 +211,7 @@ public class Main {
 
 	public static void registerDoctor(Doctor doctor, int id, int id2) { 
 		int pos1 = hospitalIdtoPosition(id);
-		int pos2 = specialityIdtoPosition(id2);
+		int pos2 = specialityIdtoPosition2(id, id2);
 		hospitals.get(pos1).getSpecialities().get(pos2).getDoctors().add(doctor);
 	}
 
@@ -237,30 +237,41 @@ public class Main {
 			w.setTime(times.get(times.size()-1).plusMinutes(30));
 		}
 		
-		System.out.println("Your appointment is at: " + w.getDate() + " " + w.getTime());
+		Hospital h = idToHospital(w.getHosp_Id());
+		Speciality sp = idToSpeciality(w.getSp_Id());
+		System.out.println("Your appointment is at: " + w.getDate() + " " + w.getTime()+ " at " + h.getName()+ " ," + sp.getName());
 		wm.addWaitingList(w);
 		
 	}
 	
 	public static void viewAppointment(Patient p) {
+		Boolean is=false;
 		for(int i=0; i<waitingLists.size();i++) {
-			if(waitingLists.get(i).getPatients().equals(p)) {
+			if(waitingLists.get(i).getPatients()==p) {
 				WaitingList w= waitingLists.get(i);
 				System.out.println("Your appointment is at: " + w.getDate() + " " + w.getTime());
+				is=true;
 			}
+		}
+		if(!is) {
+			System.out.println("You don't have an appointment");
 		}
 	}
 	
 
 	public static void abbandonWaitingList(Patient p) {
 		int pos = 0;
+		boolean is = false;
 		for (int i = 0; i < waitingLists.size(); i++) {
 			if (waitingLists.get(i).getPatients()==p) {
 				waitingLists.remove(i);
+				System.out.println("Successfully removed from the Waiting List");
 				pos=i;
-			} else {
-				System.out.println("You were not in a waiting list");
-			}
+				is=true;
+			} 	
+		}
+		if(!is) {
+			System.out.println("You were not in a waiting list");
 		}
 		for(int i=pos; i<waitingLists.size(); i++) {
 			LocalTime time= waitingLists.get(i).getTime();
@@ -374,6 +385,16 @@ public class Main {
         }
         return -1;
     }
+	
+	public static int specialityIdtoPosition2(int id_h, int id){
+		int pos = hospitalIdtoPosition(id_h);
+        for(int i = 0; i < hospitals.get(pos).getSpecialities().size(); i++){
+            if(hospitals.get(pos).getSpecialities().get(i).getId() == id){
+                return i;
+            }
+        }
+        return -1;
+    }
 
 	
 	// FUNCIONES DE SYMPTOMS
@@ -477,6 +498,8 @@ public class Main {
 					}
 				}
 			}while(!is);
+			
+			System.out.println("Hospital deleted successfully");
 			hospitals.remove(h);
 			hm.deleteHospital(aux);
 			
@@ -534,11 +557,12 @@ public class Main {
 		try {
 			Boolean is= false;
 			int aux;
-			int id;
+			int pos2;
 			do {
 				showHospitals();
 				aux = Utils.leerEntero("Choose the hospital you want to delete the speciality: ");
-				for(int i = 0; i < hospitals.size(); i++ ) {
+				pos2 = hospitalIdtoPosition(aux);
+				for(int i = 0; i < hospitals.get(pos2).getSpecialities().size(); i++ ) {
 					if(aux == hospitals.get(i).getId()) {
 						is=true;
 					}
@@ -548,10 +572,11 @@ public class Main {
 			do {
 				showSpecialitiesFromAHospital(aux);
 				int aux2 = Utils.leerEntero("Choose the speciality you want to delete: ");
-				int pos = specialityIdtoPosition(aux2);
-				int pos2 = hospitalIdtoPosition(aux);
+				int pos = specialityIdtoPosition2(aux, aux2);
 				hospitals.get(pos2).getSpecialities().remove(pos);
 				hm.deleteSpeciality(aux, aux2);	
+				is = true;
+				System.out.println("SPECIALITY REMOVED SUCCESFULLY!!");
 			}while(!is);		
 			
 		} catch (IndexOutOfBoundsException ex) {
@@ -657,12 +682,14 @@ public class Main {
 				hospitalid = Utils.leerEntero("Introduce the number of hospital you work in");
 			}while(hospitalid < 1 || hospitalid >= hospitals.size());
 			showSpecialitiesFromAHospital(hospitalid);
+			int pos = hospitalIdtoPosition(hospitalid);
 			boolean is =false;
 			do {
 				specialityid = Utils.leerEntero("Introduce the number of your speciality");
-				for(int i = 0; i < hospitals.get(hospitalid-1).getSpecialities().size() && specialityid < specialities.size(); i++ ) {
-					if(specialityid == hospitals.get(hospitalid-1).getSpecialities().get(i).getId()) {
+				for(int i=0; i<hospitals.get(pos).getSpecialities().size();i++) {
+					if(specialityid == hospitals.get(pos).getSpecialities().get(i).getId()) {
 						is=true;
+				
 					}
 				}
 			}while(!is);
@@ -722,7 +749,7 @@ public class Main {
 			System.out.println("\n\n1.I am a doctor:");
 			System.out.println("2.I am a patient:");
 			System.out.println("3.I am an administrator :");
-			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
+			option = Utils.leerEntero("Introduce an option (0 to exit): ");
 		} while (option > 3 || option < 0);
 
 		return option;
@@ -736,7 +763,7 @@ public class Main {
 			System.out.println("2.Abandon Waiting List"); 
 			System.out.println("3.View my appointment");
 			System.out.println("4.Log out");
-			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
+			option = Utils.leerEntero("Introduce an option (0 to exit): ");
 		} while (option > 4 || option < 0);
 
 		// get the report of the waiting list
@@ -747,12 +774,10 @@ public class Main {
 		int option = 0;
 		
 		do {
-			
-			System.out.println("\n\n1. Log in");
-			System.out.println("In our data base there is only one administrator, for you to log in as an admin: email=admin@gmail.com, passw= admin");
-			System.out.println("2. Exit");
-			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
-		} while (option > 2 || option < 0);
+			System.out.println("\n\nIn our data base there is only one administrator, for you to log in as an admin: email=admin@gmail.com, passw= admin");
+			System.out.println("1. Log in");
+			option = Utils.leerEntero("Introduce an option (0 to exit): ");
+		} while (option > 1 || option < 0);
 
 		return option;
 	}
@@ -763,9 +788,8 @@ public class Main {
 		do {
 			System.out.println("\n\n1. Log in");
 			System.out.println("2. Register new account");
-			System.out.println("3. Exit");
-			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
-		} while (option > 3 || option < 0);
+			option = Utils.leerEntero("Introduce an option (0 to exit): ");
+		} while (option > 2 || option < 0);
 
 		return option;
 	}
@@ -775,9 +799,9 @@ public class Main {
 		int option = 0;
 
 		do {
-			System.out.println("\n\n1.View waitingList(List of patients of the day:");
+			System.out.println("\n\n1.View waitingList");
 			System.out.println("2.Log out");
-			option = Utils.leerEntero("Introduzca una opcion (0 para salir): ");
+			option = Utils.leerEntero("Introduce an option (0 to exit): ");
 		} while (option > 2 || option < 0);
 
 		return option;

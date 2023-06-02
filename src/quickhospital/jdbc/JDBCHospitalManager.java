@@ -119,7 +119,7 @@ public class JDBCHospitalManager {
 		try {
 			s=manager.getConnection().prepareStatement(sql);
 			s.setInt(1, h);
-			s.setInt(1, sp);
+			s.setInt(2, sp);
 			s.executeUpdate();
 			s.close();
 		}catch(SQLException e) {
